@@ -88,11 +88,13 @@ function HeroBeforeAfter() {
       onTouchStart={(e) => { drag.current = true; move(e.touches[0].clientX); }}
     >
       <image-slot id="hero-after" shape="rect" radius="2px"
+        src="assets/hero-after.jpg"
         placeholder="Après — mannequin IA habillé"
         style={{position:'absolute', inset:0}}>
       </image-slot>
       <div style={{position:'absolute', inset:0, clipPath: `inset(0 ${100 - pos}% 0 0)`}}>
         <image-slot id="hero-before" shape="rect" radius="2px"
+          src="assets/hero-before.jpg"
           placeholder="Avant — vêtement à plat"
           style={{position:'absolute', inset:0}}>
         </image-slot>
