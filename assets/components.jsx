@@ -36,7 +36,7 @@ function Nav() {
           </div>
           <div className="global-nav-right">
             <a href="#recherche" aria-label="Recherche">⌕</a>
-            <a href="#connexion">Connexion</a>
+            <a href="signup.html">Connexion</a>
           </div>
         </div>
       </nav>
@@ -47,7 +47,7 @@ function Nav() {
             <a href="#fonctionnement">Fonctionnement</a>
             <a href="#pipeline">Technologie</a>
             <a href="#tarifs">Tarifs</a>
-            <a className="btn btn-primary" href="#essai">Essayer</a>
+            <a className="btn btn-primary" href="signup.html">Essayer</a>
           </div>
         </div>
       </div>
@@ -163,7 +163,7 @@ function Hero({ variant }) {
             prêts pour la campagne.
           </p>
           <div className="hero-ctas fade-up d3">
-            <a className="btn btn-primary" href="#essai">Commencer — 29€/mois</a>
+            <a className="btn btn-primary" href="signup.html">Commencer — 29€/mois</a>
             <a className="btn btn-secondary-pill" href="#fonctionnement">En savoir plus</a>
           </div>
           <div className="hero-meta fade-up d4">
@@ -503,7 +503,7 @@ function Pricing() {
                   </li>
                 ))}
               </ul>
-              <a className={"btn " + (p.featured ? "btn-primary" : "btn-secondary-pill")} href="#essai" style={{width: '100%'}}>{p.cta}</a>
+              <a className={"btn " + (p.featured ? "btn-primary" : "btn-secondary-pill")} href="signup.html" style={{width: '100%'}}>{p.cta}</a>
             </article>
           ))}
         </div>
@@ -531,7 +531,7 @@ function FinalCTA() {
           Vous gardez tous les droits sur vos visuels.
         </p>
         <div style={{display:'flex', gap: 10, justifyContent:'center', marginTop: 28, flexWrap:'wrap'}}>
-          <a className="btn btn-primary" href="#inscription">Créer mon compte</a>
+          <a className="btn btn-primary" href="signup.html">Créer mon compte</a>
           <a className="btn btn-secondary-pill" href="#demo">Demander une démo</a>
         </div>
       </div>
@@ -548,7 +548,7 @@ function StickyBar() {
       <span className="t-body">
         À partir de <strong>29€/mois</strong> · 50 crédits inclus · résiliable à tout moment.
       </span>
-      <a className="btn btn-primary" href="#essai">Commencer</a>
+      <a className="btn btn-primary" href="signup.html">Commencer</a>
     </div>
   );
 }

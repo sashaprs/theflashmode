@@ -1,0 +1,607 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Inscription — TheFlashMode</title>
+<meta name="description" content="Créez votre compte TheFlashMode gratuitement. 5 crédits offerts, aucune carte bancaire requise." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --primary: #0066cc;
+  --primary-focus: #0071e3;
+  --on-primary: #ffffff;
+  --canvas: #ffffff;
+  --canvas-parchment: #f5f5f7;
+  --ink: #1d1d1f;
+  --ink-muted: #6e6e73;
+  --ink-muted-light: #9a9a9f;
+  --hairline: #d2d2d7;
+  --divider: #e8e8ed;
+  --surface-dark: #1d1d1f;
+  --radius-card: 16px;
+  --radius-btn: 980px;
+  --radius-field: 12px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--canvas-parchment);
+  color: var(--ink);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ── */
+.signup-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  height: 52px;
+  background: var(--canvas-parchment);
+  border-bottom: 1px solid var(--divider);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.signup-nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.signup-nav-breadcrumb {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--ink-muted);
+  text-transform: uppercase;
+}
+
+.flash-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.brand-wordmark {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.signup-nav-right {
+  font-size: 14px;
+  color: var(--ink-muted);
+}
+
+.signup-nav-right a {
+  color: var(--primary);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.signup-nav-right a:hover { text-decoration: underline; }
+
+/* ── MAIN ── */
+.signup-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 56px 24px 80px;
+}
+
+.signup-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.signup-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: 16px;
+}
+
+.signup-eyebrow span {
+  color: var(--primary);
+}
+
+.signup-title {
+  font-size: clamp(36px, 5vw, 52px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+
+.signup-subtitle {
+  font-size: 17px;
+  color: var(--ink-muted);
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+/* ── TWO-COLUMN FORM ── */
+.signup-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  width: 100%;
+  max-width: 880px;
+}
+
+@media (max-width: 720px) {
+  .signup-grid { grid-template-columns: 1fr; }
+}
+
+.signup-col {
+  background: var(--canvas);
+  border-radius: var(--radius-card);
+  padding: 32px;
+  border: 1px solid var(--divider);
+}
+
+.col-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  margin-bottom: 20px;
+}
+
+/* ── PROFILE CARDS ── */
+.profile-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px;
+  border: 1.5px solid var(--divider);
+  border-radius: 12px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  position: relative;
+}
+
+.profile-card:last-of-type { margin-bottom: 0; }
+
+.profile-card:hover {
+  border-color: var(--primary);
+  background: #f0f7ff;
+}
+
+.profile-card.selected {
+  border-color: var(--primary);
+  background: #f0f7ff;
+}
+
+.profile-icon-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--canvas-parchment);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 18px;
+}
+
+.profile-card.selected .profile-icon-wrap {
+  background: var(--primary);
+  color: #fff;
+}
+
+.profile-text { flex: 1; }
+
+.profile-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 3px;
+}
+
+.profile-desc {
+  font-size: 13px;
+  color: var(--ink-muted);
+  line-height: 1.4;
+}
+
+.profile-radio {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--hairline);
+  flex-shrink: 0;
+  margin-top: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-card.selected .profile-radio {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.profile-card.selected .profile-radio::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.profile-note {
+  font-size: 13px;
+  color: var(--ink-muted);
+  line-height: 1.5;
+  margin-top: 18px;
+}
+
+/* ── CREDENTIALS FORM ── */
+.oauth-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.btn-oauth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: var(--radius-btn);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1.5px solid var(--hairline);
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+
+.btn-oauth:hover { opacity: 0.82; }
+
+.btn-oauth-google {
+  background: var(--canvas);
+  color: var(--ink);
+}
+
+.btn-oauth-apple {
+  background: var(--surface-dark);
+  color: #fff;
+  border-color: var(--surface-dark);
+}
+
+.oauth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  color: var(--ink-muted-light);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.oauth-divider::before,
+.oauth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--divider);
+}
+
+.field-group { margin-bottom: 16px; }
+
+.field-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ink);
+  margin-bottom: 7px;
+}
+
+.field-input {
+  width: 100%;
+  padding: 13px 16px;
+  border: 1.5px solid var(--hairline);
+  border-radius: var(--radius-field);
+  font-family: inherit;
+  font-size: 15px;
+  color: var(--ink);
+  background: var(--canvas);
+  outline: none;
+  transition: border-color 0.15s;
+  appearance: none;
+}
+
+.field-input:focus { border-color: var(--primary); }
+
+.field-input-wrap {
+  position: relative;
+}
+
+.field-input-wrap .field-input {
+  padding-right: 44px;
+}
+
+.field-eye {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: var(--ink-muted);
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.field-hint {
+  font-size: 12px;
+  color: var(--ink-muted);
+  margin-top: 6px;
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.checkbox-input {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  accent-color: var(--primary);
+  cursor: pointer;
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+
+.checkbox-label {
+  font-size: 13px;
+  color: var(--ink-muted);
+  line-height: 1.5;
+}
+
+.checkbox-label a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.checkbox-label a:hover { text-decoration: underline; }
+
+.btn-submit {
+  width: 100%;
+  padding: 16px;
+  background: var(--primary);
+  color: var(--on-primary);
+  border: none;
+  border-radius: var(--radius-btn);
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btn-submit:hover { background: var(--primary-focus); }
+
+.captcha-note {
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-muted-light);
+  margin-top: 16px;
+}
+
+.captcha-note a {
+  color: var(--ink-muted);
+  text-decoration: none;
+}
+
+.captcha-note a:hover { text-decoration: underline; }
+
+/* ── FOOTER ── */
+.signup-footer {
+  background: var(--canvas-parchment);
+  border-top: 1px solid var(--divider);
+  padding: 20px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--ink-muted);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.signup-footer a {
+  color: var(--ink-muted);
+  text-decoration: none;
+}
+
+.signup-footer a:hover { text-decoration: underline; }
+
+.footer-links {
+  display: flex;
+  gap: 20px;
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="signup-nav">
+  <a class="signup-nav-brand" href="index.html">
+    <span class="signup-nav-breadcrumb">/INSCRIPTION &nbsp;·&nbsp;</span>
+    <span class="flash-icon">⚡</span>
+    <span class="brand-wordmark">TheFlashMode</span>
+  </a>
+  <div class="signup-nav-right">
+    Déjà inscrit ?&nbsp;<a href="login.html">Se connecter</a>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="signup-main">
+
+  <header class="signup-header">
+    <p class="signup-eyebrow">INSCRIPTION &nbsp;·&nbsp; <span>5 CRÉDITS OFFERTS</span></p>
+    <h1 class="signup-title">Créez votre compte.</h1>
+    <p class="signup-subtitle">Aucune carte bancaire requise. Vous gardez tous les droits sur vos visuels.</p>
+  </header>
+
+  <form class="signup-grid" id="signup-form" onsubmit="handleSubmit(event)" novalidate>
+
+    <!-- COL 1 — PROFILE -->
+    <div class="signup-col">
+      <p class="col-label">01 · Choisissez votre profil</p>
+
+      <div class="profile-card selected" id="card-marque" onclick="selectProfile('marque')">
+        <div class="profile-icon-wrap">&#9783;</div>
+        <div class="profile-text">
+          <div class="profile-name">Marque</div>
+          <div class="profile-desc">E-commerce mode, créateurs, dropshipping — générez vos visuels campagne.</div>
+        </div>
+        <div class="profile-radio"></div>
+      </div>
+
+      <div class="profile-card" id="card-mannequin" onclick="selectProfile('mannequin')">
+        <div class="profile-icon-wrap">&#128100;</div>
+        <div class="profile-text">
+          <div class="profile-name">Mannequin</div>
+          <div class="profile-desc">Cédez vos droits à l'image et touchez des royalties à chaque utilisation.</div>
+        </div>
+        <div class="profile-radio"></div>
+      </div>
+
+      <div class="profile-card" id="card-particulier" onclick="selectProfile('particulier')">
+        <div class="profile-icon-wrap">&#128100;</div>
+        <div class="profile-text">
+          <div class="profile-name">Particulier</div>
+          <div class="profile-desc">Pour usage personnel — essayage virtuel, expérimentation, projets perso.</div>
+        </div>
+        <div class="profile-radio"></div>
+      </div>
+
+      <p class="profile-note">Vous pourrez modifier ce choix à tout moment depuis vos paramètres. Chaque profil débloque une expérience adaptée.</p>
+    </div>
+
+    <!-- COL 2 — CREDENTIALS -->
+    <div class="signup-col">
+      <p class="col-label">02 · Vos identifiants</p>
+
+      <div class="oauth-row">
+        <a class="btn-oauth btn-oauth-google" href="#">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.64 9.205c0-.639-.057-1.252-.164-1.841H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 6.29C4.672 4.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+          S'inscrire avec Google
+        </a>
+        <a class="btn-oauth btn-oauth-apple" href="#">
+          <svg width="17" height="20" viewBox="0 0 17 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M13.864 10.548c-.02-2.09 1.712-3.105 1.79-3.157-.977-1.426-2.495-1.621-3.03-1.643-1.296-.131-2.528.764-3.183.764-.655 0-1.67-.745-2.746-.726-1.415.02-2.718.822-3.443 2.087C1.527 10.516 2.6 14.85 4.31 17.19c.852 1.217 1.864 2.584 3.197 2.534 1.286-.052 1.77-.822 3.325-.822 1.555 0 1.989.822 3.344.797 1.38-.022 2.254-1.24 3.096-2.462.982-1.409 1.385-2.778 1.404-2.849-.03-.014-2.694-1.033-2.722-4.09h.91zM11.618 4.094C12.305 3.26 12.77 2.116 12.64.944c-.981.04-2.17.655-2.872 1.476-.63.73-1.18 1.904-1.033 3.025 1.094.084 2.21-.558 2.883-1.351z"/></svg>
+          S'inscrire avec Apple
+        </a>
+      </div>
+
+      <div class="oauth-divider">ou avec votre email</div>
+
+      <div class="field-group">
+        <label class="field-label" for="fullname">Nom complet</label>
+        <input class="field-input" type="text" id="fullname" name="fullname" placeholder="Camille Vidal" autocomplete="name" required />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="email">Adresse email professionnelle</label>
+        <input class="field-input" type="email" id="email" name="email" placeholder="camille@maison-elise.com" autocomplete="email" required />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="password">Mot de passe</label>
+        <div class="field-input-wrap">
+          <input class="field-input" type="password" id="password" name="password" placeholder="••••••••••••" autocomplete="new-password" required minlength="8" />
+          <button type="button" class="field-eye" onclick="togglePassword()" aria-label="Afficher le mot de passe">&#128065;</button>
+        </div>
+        <p class="field-hint">Au moins 8 caractères, avec une majuscule et un chiffre.</p>
+      </div>
+
+      <div class="checkbox-row">
+        <input class="checkbox-input" type="checkbox" id="terms" name="terms" required />
+        <label class="checkbox-label" for="terms">
+          J'accepte les <a href="#">conditions générales</a> et la <a href="#">politique de confidentialité</a>.
+        </label>
+      </div>
+
+      <button class="btn-submit" type="submit">Créer mon compte gratuitement</button>
+
+      <p class="captcha-note">
+        Protégé par reCAPTCHA &nbsp;·&nbsp;
+        <a href="#">Confidentialité</a> &nbsp;·&nbsp;
+        <a href="#">Conditions</a>
+      </p>
+    </div>
+
+  </form>
+</main>
+
+<!-- FOOTER -->
+<footer class="signup-footer">
+  <span>© 2026 TheFlashMode SAS · Paris · Hébergement RGPD France</span>
+  <nav class="footer-links">
+    <a href="#">Confidentialité</a>
+    <a href="#">CGU</a>
+    <a href="#">Aide</a>
+    <a href="#">Status</a>
+  </nav>
+</footer>
+
+<script>
+let selectedProfile = 'marque';
+
+function selectProfile(profile) {
+  selectedProfile = profile;
+  ['marque', 'mannequin', 'particulier'].forEach(p => {
+    document.getElementById('card-' + p).classList.toggle('selected', p === profile);
+  });
+}
+
+function togglePassword() {
+  const pw = document.getElementById('password');
+  pw.type = pw.type === 'password' ? 'text' : 'password';
+}
+
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = document.querySelector('.btn-submit');
+  btn.textContent = 'Création en cours…';
+  btn.disabled = true;
+  // TODO: wire to backend auth
+  setTimeout(() => {
+    window.location.href = 'dashboard.html';
+  }, 1200);
+}
+</script>
+</body>
+</html>
