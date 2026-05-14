@@ -1,0 +1,2858 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TheFlashMode — Un shooting mode complet, en une minute</title>
+<meta name="description" content="Plateforme SaaS de génération de visuels mode par IA. Habillez des mannequins générés par IA avec vos propres vêtements. À partir de 29€/mois." />
+<meta property="og:title" content="TheFlashMode — Un shooting mode complet, en une minute" />
+<meta property="og:description" content="Habillez des mannequins générés par IA avec vos propres vêtements. Plus de studio, plus de retouche — juste vos visuels, prêts pour la campagne." />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* TheFlashMode — Design System
+ * Built on the Lumora-style tokens: Action Blue #0066cc, parchment #f5f5f7,
+ * near-black tiles, edge-to-edge alternation, single drop-shadow on imagery.
+ * Inter substitutes SF Pro across the system.
+ */
+
+/* ---------- THEME TOKENS ---------- */
+:root,
+.theme-light {
+  /* Brand & Accent */
+  --primary: #0066cc;
+  --primary-focus: #0071e3;
+  --primary-on-dark: #2997ff;
+  --on-primary: #ffffff;
+
+  /* Surfaces */
+  --canvas: #ffffff;
+  --canvas-parchment: #f5f5f7;
+  --surface-pearl: #fafafc;
+  --surface-tile-1: #272729;
+  --surface-tile-2: #2a2a2c;
+  --surface-tile-3: #252527;
+  --surface-black: #000000;
+
+  /* Text */
+  --ink: #1d1d1f;
+  --body: #1d1d1f;
+  --body-on-dark: #ffffff;
+  --body-muted: #cccccc;
+  --ink-muted-80: #333333;
+  --ink-muted-48: #7a7a7a;
+
+  /* Hairlines */
+  --divider-soft: #f0f0f0;
+  --hairline: #e0e0e0;
+
+  /* Surfaced via theme */
+  --nav-bg: #000000;
+  --nav-ink: #ffffff;
+  --footer-bg: var(--canvas-parchment);
+}
+
+.theme-dark {
+  --primary: #2997ff;
+  --primary-focus: #2997ff;
+  --primary-on-dark: #2997ff;
+  --on-primary: #ffffff;
+
+  --canvas: #0c0c0d;
+  --canvas-parchment: #161617;
+  --surface-pearl: #1a1a1c;
+  --surface-tile-1: #272729;
+  --surface-tile-2: #2a2a2c;
+  --surface-tile-3: #252527;
+  --surface-black: #000000;
+
+  --ink: #f5f5f7;
+  --body: #f5f5f7;
+  --body-on-dark: #ffffff;
+  --body-muted: #cccccc;
+  --ink-muted-80: #d2d2d7;
+  --ink-muted-48: #86868b;
+
+  --divider-soft: #2a2a2c;
+  --hairline: #353537;
+
+  --nav-bg: #000000;
+  --nav-ink: #ffffff;
+  --footer-bg: var(--canvas-parchment);
+}
+
+.theme-sepia {
+  --primary: #a85a2a;
+  --primary-focus: #c06a30;
+  --primary-on-dark: #d28e5f;
+  --on-primary: #fbf6ec;
+
+  --canvas: #f6efe2;
+  --canvas-parchment: #ecdfc8;
+  --surface-pearl: #f0e6d3;
+  --surface-tile-1: #2a201a;
+  --surface-tile-2: #2d2218;
+  --surface-tile-3: #251c14;
+  --surface-black: #14100a;
+
+  --ink: #2a201a;
+  --body: #2a201a;
+  --body-on-dark: #f6efe2;
+  --body-muted: #d8c9ad;
+  --ink-muted-80: #4a3a2e;
+  --ink-muted-48: #8c7660;
+
+  --divider-soft: #dfd1b3;
+  --hairline: #d6c7a8;
+
+  --nav-bg: #14100a;
+  --nav-ink: #f6efe2;
+  --footer-bg: var(--canvas-parchment);
+}
+
+/* ---------- TYPOGRAPHY ---------- */
+:root {
+  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --font-headline: var(--font-sans);
+  --headline-weight: 600;
+  --headline-tracking: -0.022em;
+  --headline-tx: none;
+  --headline-italic-color: var(--primary);
+}
+.type-editorial {
+  --font-headline: var(--font-serif);
+  --headline-weight: 400;
+  --headline-tracking: -0.018em;
+}
+.type-neutral {
+  --font-headline: var(--font-sans);
+  --headline-weight: 600;
+  --headline-tracking: -0.022em;
+}
+.type-display {
+  --font-headline: var(--font-sans);
+  --headline-weight: 700;
+  --headline-tracking: -0.04em;
+  --headline-tx: uppercase;
+}
+
+/* ---------- DENSITY ---------- */
+:root, .density-airy {
+  --s-section: 96px;
+  --s-block: 56px;
+  --tile-px: 32px;
+  --hero-py: clamp(80px, 11vh, 140px);
+}
+.density-compact {
+  --s-section: 60px;
+  --s-block: 36px;
+  --tile-px: 24px;
+  --hero-py: clamp(48px, 7vh, 80px);
+}
+
+/* ---------- RESET ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-sans);
+  color: var(--body);
+  background: var(--canvas);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: "ss03";
+  transition: background 280ms ease, color 280ms ease;
+}
+img, svg { display: block; max-width: 100%; }
+button { font: inherit; cursor: pointer; border: 0; background: transparent; color: inherit; }
+a { color: inherit; text-decoration: none; }
+input, textarea, select { font: inherit; color: inherit; }
+::selection { background: var(--primary); color: var(--on-primary); }
+
+/* ---------- TYPE SCALE (mirrors design-system tokens) ---------- */
+.t-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-muted-48);
+  display: inline-block;
+}
+.t-hero {
+  /* hero-display — 56px / 600 / 1.07 / -0.28px */
+  font-family: var(--font-headline);
+  font-weight: var(--headline-weight);
+  font-size: clamp(40px, 5.6vw, 80px);
+  line-height: 1.04;
+  letter-spacing: var(--headline-tracking);
+  text-transform: var(--headline-tx);
+  margin: 0;
+  text-wrap: balance;
+}
+.t-display-lg {
+  /* display-lg — 40px / 600 / 1.10 */
+  font-family: var(--font-headline);
+  font-weight: var(--headline-weight);
+  font-size: clamp(32px, 3.4vw, 48px);
+  line-height: 1.08;
+  letter-spacing: var(--headline-tracking);
+  text-transform: var(--headline-tx);
+  margin: 0;
+  text-wrap: balance;
+}
+.t-display-md {
+  /* display-md — 34px / 600 / 1.47 / -0.374 */
+  font-family: var(--font-headline);
+  font-weight: var(--headline-weight);
+  font-size: clamp(24px, 2.2vw, 34px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  text-transform: var(--headline-tx);
+  margin: 0;
+  text-wrap: balance;
+}
+.t-lead {
+  /* lead — 28px / 400 / 1.14 */
+  font-family: var(--font-sans);
+  font-size: clamp(20px, 1.7vw, 26px);
+  font-weight: 400;
+  line-height: 1.28;
+  letter-spacing: 0.005em;
+  color: var(--body);
+  max-width: 62ch;
+  text-wrap: pretty;
+}
+.t-lead-airy {
+  /* lead-airy — 24px / 300 / 1.5 */
+  font-family: var(--font-sans);
+  font-size: clamp(18px, 1.45vw, 22px);
+  font-weight: 300;
+  line-height: 1.5;
+  letter-spacing: 0;
+  color: var(--ink-muted-80);
+  max-width: 64ch;
+}
+.t-tagline {
+  /* tagline — 21px / 600 / 1.19 */
+  font-size: 21px; font-weight: 600; line-height: 1.19; letter-spacing: 0.005em;
+}
+.t-body { font-size: 17px; font-weight: 400; line-height: 1.47; letter-spacing: -0.012em; }
+.t-body-strong { font-size: 17px; font-weight: 600; line-height: 1.24; letter-spacing: -0.012em; }
+.t-caption { font-size: 14px; font-weight: 400; line-height: 1.43; letter-spacing: -0.008em; color: var(--ink-muted-48); }
+.t-caption-strong { font-size: 14px; font-weight: 600; line-height: 1.29; letter-spacing: -0.008em; }
+.t-fine { font-size: 12px; font-weight: 400; line-height: 1.4; color: var(--ink-muted-48); }
+.t-num { font-variant-numeric: tabular-nums; }
+
+/* Italic accent — only meaningful when editorial typo is active */
+.t-it { font-style: italic; }
+.type-editorial .t-it { color: var(--headline-italic-color); }
+
+/* ---------- LAYOUT ---------- */
+.tile {
+  padding: var(--s-section) var(--tile-px);
+  position: relative;
+}
+.tile.dark {
+  background: var(--surface-tile-1);
+  color: var(--body-on-dark);
+}
+.tile.dark .t-caption,
+.tile.dark .t-lead-airy { color: var(--body-muted); }
+.tile.dark .t-lead { color: var(--body-on-dark); }
+.tile.dark .t-eyebrow { color: var(--body-muted); }
+.tile.parchment { background: var(--canvas-parchment); }
+.tile.pearl { background: var(--surface-pearl); }
+.tile.tile-2 { background: var(--surface-tile-2); color: var(--body-on-dark); }
+.tile.tile-3 { background: var(--surface-tile-3); color: var(--body-on-dark); }
+
+.wrap { max-width: 1280px; margin: 0 auto; }
+.wrap-narrow { max-width: 980px; margin: 0 auto; }
+
+/* ---------- BUTTONS ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border-radius: 9999px;
+  font-family: var(--font-sans);
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  padding: 11px 22px;
+  transition: transform 120ms ease, background 160ms ease, color 160ms ease, box-shadow 160ms ease;
+  white-space: nowrap;
+  line-height: 1;
+}
+.btn:active { transform: scale(0.95); }
+.btn-primary {
+  background: var(--primary);
+  color: var(--on-primary);
+}
+.btn-primary:hover { background: var(--primary-focus); }
+.btn-primary:focus-visible { outline: 2px solid var(--primary-focus); outline-offset: 2px; }
+
+.btn-secondary-pill {
+  background: transparent;
+  color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+.btn-secondary-pill:hover { background: var(--primary); color: var(--on-primary); }
+.tile.dark .btn-secondary-pill { color: var(--primary-on-dark); box-shadow: inset 0 0 0 1px var(--primary-on-dark); }
+.tile.dark .btn-secondary-pill:hover { background: var(--primary-on-dark); color: var(--surface-tile-1); }
+
+/* Compact utility (Sign In, Bag) */
+.btn-dark-utility {
+  background: var(--ink);
+  color: var(--on-primary);
+  border-radius: 8px;
+  padding: 8px 15px;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: -0.008em;
+}
+.btn-dark-utility:hover { background: #333; }
+
+/* Pearl capsule (white on parchment) */
+.btn-pearl {
+  background: var(--surface-pearl);
+  color: var(--ink-muted-80);
+  border-radius: 11px;
+  padding: 8px 14px;
+  font-size: 14px;
+  box-shadow: inset 0 0 0 1px var(--divider-soft);
+}
+.btn-pearl:hover { background: var(--canvas); }
+
+/* Store-hero (larger, weight 300) */
+.btn-store-hero {
+  font-size: 18px;
+  font-weight: 300;
+  padding: 14px 28px;
+}
+
+/* Circular icon (44px, translucent over imagery) */
+.btn-icon-circular {
+  width: 44px; height: 44px;
+  background: rgba(210, 210, 215, 0.64);
+  color: var(--ink);
+  border-radius: 9999px;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.btn-icon-circular:hover { background: rgba(210, 210, 215, 0.85); }
+.tile.dark .btn-icon-circular { background: rgba(210,210,215,0.5); }
+
+/* Text links */
+.link {
+  color: var(--primary);
+  font-size: 17px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.link:hover { text-decoration: underline; text-underline-offset: 3px; }
+.link::after { content: " ›"; opacity: 0.9; }
+.tile.dark .link { color: var(--primary-on-dark); }
+
+/* ---------- GLOBAL NAV (slim black bar) ---------- */
+.global-nav {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: var(--nav-bg);
+  color: var(--nav-ink);
+  height: 44px;
+}
+.global-nav-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  height: 100%;
+  padding: 0 22px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px;
+}
+.global-nav-links {
+  display: flex; align-items: center;
+  gap: 26px;
+  flex: 1;
+  justify-content: center;
+}
+.global-nav-links a {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  color: var(--nav-ink);
+  opacity: 0.85;
+  transition: opacity 120ms ease;
+}
+.global-nav-links a:hover { opacity: 1; }
+.global-nav-brand {
+  font-family: var(--font-headline);
+  font-weight: var(--headline-weight);
+  font-size: 14px;
+  letter-spacing: -0.012em;
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--nav-ink);
+}
+.brand-mark {
+  font-family: var(--font-headline);
+  font-weight: var(--headline-weight);
+  letter-spacing: -0.012em;
+  display: inline-flex; align-items: center; gap: 6px;
+  color: var(--ink);
+}
+.brand-mark .bolt {
+  display: inline-block;
+  width: 12px; height: 12px;
+  background: var(--primary);
+  clip-path: polygon(60% 0, 0 60%, 40% 60%, 25% 100%, 100% 35%, 55% 35%, 75% 0);
+  transform: translateY(1px);
+}
+.global-nav-brand .bolt {
+  display: inline-block;
+  width: 12px; height: 12px;
+  background: var(--primary);
+  clip-path: polygon(60% 0, 0 60%, 40% 60%, 25% 100%, 100% 35%, 55% 35%, 75% 0);
+  transform: translateY(1px);
+}
+.global-nav-right { display: flex; align-items: center; gap: 14px; }
+.global-nav-right a, .global-nav-right button {
+  font-size: 12px; opacity: 0.85;
+  color: var(--nav-ink);
+  display: inline-flex; align-items: center;
+}
+.global-nav-right a:hover { opacity: 1; }
+@media (max-width: 900px) {
+  .global-nav-links { display: none; }
+}
+
+/* ---------- SUB NAV (frosted parchment) ---------- */
+.sub-nav {
+  position: sticky;
+  top: 44px;
+  z-index: 50;
+  height: 52px;
+  background: color-mix(in oklab, var(--canvas-parchment) 80%, transparent);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 1px solid var(--hairline);
+}
+.sub-nav-inner {
+  max-width: 1280px;
+  margin: 0 auto; height: 100%;
+  padding: 0 22px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 24px;
+}
+.sub-nav-title { font-size: 21px; font-weight: 600; letter-spacing: -0.012em; color: var(--ink); }
+.sub-nav-links {
+  display: flex; gap: 22px; align-items: center;
+}
+.sub-nav-links a {
+  font-size: 14px;
+  color: var(--ink);
+  opacity: 0.85;
+}
+.sub-nav-links a:hover { opacity: 1; }
+.sub-nav-links .btn { padding: 7px 16px; font-size: 14px; }
+@media (max-width: 720px) {
+  .sub-nav-links a:not(.btn) { display: none; }
+}
+
+/* ---------- IMAGE PLACEHOLDERS ---------- */
+.ph {
+  position: relative;
+  background:
+    repeating-linear-gradient(135deg, rgba(29,29,31,0.03) 0 1px, transparent 1px 12px),
+    var(--canvas-parchment);
+  color: var(--ink-muted-48);
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  padding: 16px;
+  overflow: hidden;
+}
+.tile.dark .ph {
+  background:
+    repeating-linear-gradient(135deg, rgba(255,255,255,0.03) 0 1px, transparent 1px 12px),
+    var(--surface-tile-2);
+  color: #6b6b6f;
+}
+.ph-label { letter-spacing: 0.12em; text-transform: uppercase; }
+
+/* ---------- CHIPS / BADGES ---------- */
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+  background: var(--surface-pearl);
+  border: 1px solid var(--hairline);
+  color: var(--ink-muted-80);
+}
+.chip.accent { background: color-mix(in oklab, var(--primary) 10%, transparent); color: var(--primary); border-color: transparent; }
+.chip.dark { background: rgba(255,255,255,0.08); color: #fff; border-color: rgba(255,255,255,0.14); }
+
+.badge-celeb {
+  display: inline-flex; align-items: center; gap: 4px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  background: var(--ink);
+  color: #f3d98b;
+}
+
+/* ---------- CARDS / TILES ---------- */
+.card {
+  background: var(--canvas);
+  border: 1px solid var(--hairline);
+  border-radius: 18px;
+  padding: 24px;
+}
+
+/* product imagery shadow (THE single drop-shadow in the system) */
+.product-shadow {
+  filter: drop-shadow(3px 5px 30px rgba(0,0,0,0.22));
+}
+
+/* ---------- FOOTER ---------- */
+.footer {
+  background: var(--footer-bg);
+  color: var(--ink-muted-80);
+  padding: 64px 22px 28px;
+}
+.footer-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.6fr repeat(4, 1fr);
+  gap: 48px;
+}
+.footer h4 {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 14px;
+  color: var(--ink);
+  letter-spacing: -0.008em;
+}
+.footer-col ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.footer-col li a { font-size: 14px; line-height: 1.43; color: var(--ink-muted-80); }
+.footer-col li a:hover { color: var(--ink); }
+.footer-legal {
+  max-width: 1280px;
+  margin: 48px auto 0;
+  padding-top: 18px;
+  border-top: 1px solid var(--hairline);
+  display: flex; justify-content: space-between; gap: 24px;
+  font-size: 12px;
+  color: var(--ink-muted-48);
+  flex-wrap: wrap;
+}
+@media (max-width: 900px) {
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+}
+
+/* ---------- ANIMATIONS ---------- */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; } }
+.fade-up { animation: fadeUp 700ms cubic-bezier(.2,.7,.2,1) both; }
+.fade-up.d1 { animation-delay: 80ms; }
+.fade-up.d2 { animation-delay: 160ms; }
+.fade-up.d3 { animation-delay: 240ms; }
+.fade-up.d4 { animation-delay: 320ms; }
+
+/* ============================================================
+   SECTION-SPECIFIC
+============================================================ */
+
+/* HERO */
+.hero { padding-top: var(--hero-py); padding-bottom: var(--hero-py); }
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+.hero-copy .t-eyebrow { margin-bottom: 18px; }
+.hero-ctas {
+  margin-top: 28px;
+  display: flex; gap: 10px; flex-wrap: wrap;
+}
+.hero-meta {
+  margin-top: 24px;
+  display: flex; flex-wrap: wrap; gap: 12px;
+  color: var(--ink-muted-48);
+  font-size: 14px;
+}
+.hero-visual {
+  aspect-ratio: 4 / 5;
+  position: relative;
+  filter: drop-shadow(3px 5px 30px rgba(0,0,0,0.22));
+}
+.ba {
+  position: absolute; inset: 0;
+  overflow: hidden;
+  border-radius: 2px;
+  cursor: ew-resize;
+  user-select: none;
+  background: var(--canvas-parchment);
+}
+.ba image-slot { display: block; width: 100%; height: 100%; }
+.ba-line {
+  position: absolute; top: 0; bottom: 0;
+  width: 2px; background: #fff;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.18);
+  pointer-events: none;
+  transform: translateX(-1px);
+}
+.ba-handle {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px; height: 44px;
+  background: rgba(210, 210, 215, 0.85);
+  backdrop-filter: blur(10px);
+  border-radius: 9999px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--ink);
+  pointer-events: auto;
+  cursor: ew-resize;
+}
+.ba-badge {
+  position: absolute; bottom: 14px;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  background: rgba(255,255,255,0.92);
+  color: var(--ink);
+  border-radius: 4px;
+  pointer-events: none;
+}
+.ba-left { left: 14px; }
+.ba-right { right: 14px; }
+.loop-frames {
+  position: absolute; top: 14px; right: 14px;
+  display: flex; gap: 6px;
+}
+.loop-dot {
+  width: 16px; height: 3px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 2px;
+  transition: background 200ms ease;
+}
+.loop-dot.on { background: #fff; }
+@media (max-width: 960px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+  .hero-visual { aspect-ratio: 4/5; max-width: 520px; margin: 0 auto; width: 100%; }
+}
+
+/* LOGO STRIP */
+.logo-strip { padding: 28px 22px; border-bottom: 1px solid var(--divider-soft); background: var(--canvas); }
+.logo-strip-label { text-align: center; margin-bottom: 14px; }
+.logo-strip-row {
+  display: flex; gap: 48px; justify-content: center; align-items: center; flex-wrap: wrap;
+  font-size: 17px; font-weight: 500;
+  color: var(--ink-muted-48);
+  opacity: 0.95;
+}
+
+/* SECTION HEAD */
+.section-head { margin-bottom: 56px; max-width: 880px; }
+.section-head.center { margin-left: auto; margin-right: auto; text-align: center; }
+.section-head.center .t-lead { margin-left: auto; margin-right: auto; }
+.section-head-row {
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 48px;
+  max-width: none;
+}
+@media (max-width: 720px) {
+  .section-head-row { flex-direction: column; align-items: flex-start; gap: 24px; }
+}
+
+/* PROBLEM */
+.problem-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start;
+}
+.problem-result {
+  margin-top: 36px;
+  padding-top: 28px;
+  border-top: 1px solid var(--hairline);
+}
+.problem-price {
+  font-family: var(--font-headline);
+  font-size: clamp(56px, 8vw, 96px);
+  font-weight: var(--headline-weight);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--primary);
+  display: inline-flex;
+  align-items: baseline;
+}
+.problem-included { display: block; margin-top: 10px; }
+.problem-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; }
+.problem-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 24px;
+  padding: 18px 0;
+  align-items: center;
+  border-bottom: 1px solid var(--hairline);
+}
+.problem-row:first-child { border-top: 1px solid var(--hairline); }
+.problem-row-num { letter-spacing: 0.08em; color: var(--ink-muted-48); }
+.problem-row-price { text-align: right; }
+@media (max-width: 880px) { .problem-grid { grid-template-columns: 1fr; gap: 40px; } }
+
+/* HOW IT WORKS */
+.how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
+.how-step { display: flex; flex-direction: column; }
+.how-num {
+  font-family: var(--font-headline);
+  font-size: 36px;
+  color: var(--primary);
+  margin-bottom: 18px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-weight: var(--headline-weight);
+}
+.how-thumb {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.how-thumb image-slot { display: block; width: 100%; height: 100%; }
+@media (max-width: 880px) { .how-grid { grid-template-columns: 1fr; gap: 36px; } }
+
+/* PIPELINE */
+.pipeline { display: flex; align-items: stretch; gap: 16px; }
+.pipe-card {
+  flex: 1;
+  background: var(--surface-tile-2);
+  border-radius: 18px;
+  padding: 28px;
+  display: flex; flex-direction: column;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.pipe-tag { align-self: flex-start; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+.pipe-cost {
+  margin-top: auto;
+  padding-top: 28px;
+  font-size: 13px;
+  color: var(--primary-on-dark);
+  letter-spacing: 0.04em;
+}
+.pipe-arrow {
+  align-self: center;
+  font-size: 24px;
+  color: var(--ink-muted-48);
+}
+@media (max-width: 960px) {
+  .pipeline { flex-direction: column; }
+  .pipe-arrow { transform: rotate(90deg); }
+}
+
+/* MODELS */
+.models-carousel {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 14px;
+}
+.model-card { position: relative; }
+.model-portrait {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  margin-bottom: 10px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.model-portrait image-slot { display: block; width: 100%; height: 100%; }
+.model-portrait .badge-celeb {
+  position: absolute; top: 10px; left: 10px;
+}
+.models-cta {
+  margin-top: 40px;
+  display: flex; gap: 28px; flex-wrap: wrap;
+}
+@media (max-width: 1100px) { .models-carousel { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 640px) { .models-carousel { grid-template-columns: 1fr 1fr; } }
+
+/* GALLERY — store-style 18px cards */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.store-card {
+  background: var(--canvas);
+  border: 1px solid var(--hairline);
+  border-radius: 18px;
+  padding: 24px;
+  display: flex; flex-direction: column;
+  gap: 16px;
+  transition: transform 200ms ease;
+}
+.store-card-img {
+  position: relative; aspect-ratio: 1 / 1; border-radius: 8px; overflow: hidden;
+  background: var(--canvas-parchment);
+}
+.store-card-img image-slot { display: block; width: 100%; height: 100%; }
+.store-card-meta { display: flex; flex-direction: column; gap: 4px; }
+.store-card-meta .name { font-size: 17px; font-weight: 600; letter-spacing: -0.012em; color: var(--ink); }
+.store-card-meta .sub  { font-size: 14px; color: var(--ink-muted-48); }
+.store-card .link { font-size: 14px; }
+@media (max-width: 1100px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px)  { .gallery-grid { grid-template-columns: 1fr; } }
+
+/* TESTIMONIALS */
+.testimonials {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px;
+  margin-top: 48px;
+}
+.t-card { display: flex; flex-direction: column; }
+@media (max-width: 960px) { .testimonials { grid-template-columns: 1fr; gap: 48px; } }
+
+/* PRICING */
+.pricing {
+  margin-top: 56px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+.price-card {
+  position: relative;
+  background: var(--canvas);
+  border: 1px solid var(--hairline);
+  border-radius: 18px;
+  padding: 28px 24px 24px;
+  display: flex; flex-direction: column;
+  gap: 16px;
+}
+.price-card.featured {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: #fff;
+}
+.price-card.featured .t-body,
+.price-card.featured .t-caption,
+.price-card.featured .price-credits { color: #fff !important; }
+.price-card.featured .price-check { color: var(--primary-on-dark); }
+.price-card.featured .price-flag {
+  position: absolute; top: -1px; right: 22px;
+  background: var(--primary); color: #fff;
+  padding: 4px 10px; font-size: 11px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  border-radius: 0 0 6px 6px;
+}
+.price-head { display: flex; flex-direction: column; gap: 4px; }
+.price-amount { display: flex; align-items: baseline; margin-top: 8px; }
+.price-features { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.price-check {
+  display: inline-block; width: 16px; color: var(--primary); margin-right: 6px; font-weight: 700;
+}
+@media (max-width: 1100px) { .pricing { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px)  { .pricing { grid-template-columns: 1fr; } }
+
+/* NEWSLETTER */
+.newsletter {
+  display: flex; gap: 8px; margin-top: 18px;
+  max-width: 360px;
+}
+.newsletter input {
+  flex: 1;
+  background: var(--canvas);
+  border: 1px solid var(--hairline);
+  border-radius: 9999px;
+  padding: 10px 16px;
+  font-size: 14px;
+  color: var(--ink);
+}
+.newsletter input:focus { outline: 2px solid var(--primary-focus); outline-offset: 2px; }
+
+/* Floating sticky bar — used at end of page */
+.sticky-bar {
+  position: sticky; bottom: 16px;
+  margin: -16px auto 24px;
+  max-width: 1100px;
+  background: color-mix(in oklab, var(--canvas-parchment) 90%, transparent);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border: 1px solid var(--hairline);
+  border-radius: 9999px;
+  padding: 10px 14px 10px 24px;
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 16px;
+  z-index: 30;
+}
+
+@media (max-width: 640px) {
+  .tile { padding: 56px 18px; }
+}
+
+</style>
+</head>
+<body class="theme-light type-neutral density-airy">
+<div id="app"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+
+<script>
+/**
+ * <image-slot> — user-fillable image placeholder.
+ *
+ * Drop this into a deck, mockup, or page wherever you want the user to
+ * supply an image. You control the slot's shape and size; the user fills it
+ * by dragging an image file onto it (or clicking to browse). The dropped
+ * image persists across reloads via a .image-slots.state.json sidecar —
+ * same read-via-fetch / write-via-window.omelette pattern as
+ * design_canvas.jsx, so the filled slot shows on share links, downloaded
+ * zips, and PPTX export. Outside the omelette runtime the slot is read-only.
+ *
+ * The host bridge only allows sidecar writes at the project root, so the
+ * HTML that uses this component is assumed to live at the project root too
+ * (same constraint as design_canvas.jsx).
+ *
+ * Attributes:
+ *   id           Persistence key. REQUIRED for the drop to survive reload —
+ *                every slot on the page needs a distinct id.
+ *   shape        'rect' | 'rounded' | 'circle' | 'pill'   (default 'rounded')
+ *                'circle' applies 50% border-radius; on a non-square slot
+ *                that's an ellipse — set equal width and height for a true
+ *                circle.
+ *   radius       Corner radius in px for 'rounded'.       (default 12)
+ *   mask         Any CSS clip-path value. Overrides `shape` — use this for
+ *                hexagons, blobs, arbitrary polygons.
+ *   fit          object-fit: cover | contain | fill.       (default 'cover')
+ *                With cover (the default) double-clicking the filled slot
+ *                enters a reframe mode: the whole image spills past the mask
+ *                (translucent outside, opaque inside), drag to reposition,
+ *                corner-drag to scale. The crop persists alongside the image
+ *                in the sidecar. contain/fill stay static.
+ *   position     object-position for fit=contain|fill.     (default '50% 50%')
+ *   placeholder  Empty-state caption.                      (default 'Drop an image')
+ *   src          Optional initial/fallback image URL. A user drop overrides
+ *                it; clearing the drop reveals src again.
+ *
+ * Size and layout come from ordinary CSS on the element — width/height
+ * inline or from a parent grid — so it composes with any layout.
+ *
+ * Usage:
+ *   <script src="image-slot.js"></script>
+ *   <image-slot id="hero"   style="width:800px;height:450px" shape="rounded" radius="20"
+ *               placeholder="Drop a hero image"></image-slot>
+ *   <image-slot id="avatar" style="width:120px;height:120px" shape="circle"></image-slot>
+ *   <image-slot id="kite"   style="width:300px;height:300px"
+ *               mask="polygon(50% 0, 100% 50%, 50% 100%, 0 50%)"></image-slot>
+ */
+
+(() => {
+  const STATE_FILE = '.image-slots.state.json';
+  // 2× a ~600px slot in a 1920-wide deck — retina-sharp without making the
+  // sidecar enormous. A 1200px WebP at q=0.85 is ~150-300KB.
+  const MAX_DIM = 1200;
+  // Raster formats only. SVG is excluded (can carry script; createImageBitmap
+  // on SVG blobs is inconsistent). GIF is excluded because the canvas
+  // re-encode keeps only the first frame, so an animated GIF would silently
+  // go still — better to reject than surprise.
+  const ACCEPT = ['image/png', 'image/jpeg', 'image/webp', 'image/avif'];
+
+  // ── Shared sidecar store ────────────────────────────────────────────────
+  // One fetch + immediate write-on-change for every <image-slot> on the
+  // page. Reads via fetch() so viewing works anywhere the HTML and sidecar
+  // are served together; writes go through window.omelette.writeFile, which
+  // the host allowlists to *.state.json basenames only.
+  const subs = new Set();
+  let slots = {};
+  // ids explicitly cleared before the sidecar fetch resolved — otherwise
+  // the merge below can't tell "never set" from "just deleted" and would
+  // resurrect the sidecar's stale value.
+  const tombstones = new Set();
+  let loaded = false;
+  let loadP = null;
+
+  function load() {
+    if (loadP) return loadP;
+    loadP = fetch(STATE_FILE)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => {
+        // Merge: sidecar loses to any in-memory change that raced ahead of
+        // the fetch (drop or clear) so neither is clobbered by hydration.
+        if (j && typeof j === 'object') {
+          const merged = Object.assign({}, j, slots);
+          // A framing-only write that raced ahead of hydration must not
+          // drop a user image that's only on disk — inherit u from the
+          // sidecar for any in-memory entry that lacks one.
+          for (const k in slots) {
+            if (merged[k] && !merged[k].u && j[k]) {
+              merged[k].u = typeof j[k] === 'string' ? j[k] : j[k].u;
+            }
+          }
+          for (const id of tombstones) delete merged[id];
+          slots = merged;
+        }
+        tombstones.clear();
+      })
+      .catch(() => {})
+      .then(() => { loaded = true; subs.forEach((fn) => fn()); });
+    return loadP;
+  }
+
+  // Serialize writes so two near-simultaneous drops on different slots
+  // can't reorder at the backend and leave the sidecar with only the
+  // first. A save requested mid-flight just marks dirty and re-fires on
+  // completion with the then-current slots.
+  let saving = false;
+  let saveDirty = false;
+  function save() {
+    if (saving) { saveDirty = true; return; }
+    const w = window.omelette && window.omelette.writeFile;
+    if (!w) return;
+    saving = true;
+    Promise.resolve(w(STATE_FILE, JSON.stringify(slots)))
+      .catch(() => {})
+      .then(() => { saving = false; if (saveDirty) { saveDirty = false; save(); } });
+  }
+
+  const S_MAX = 5;
+  const clampS = (s) => Math.max(1, Math.min(S_MAX, s));
+
+  // Normalize a stored slot value. Pre-reframe sidecars stored a bare
+  // data-URL string; newer ones store {u, s, x, y}. Either shape is valid.
+  function getSlot(id) {
+    const v = slots[id];
+    if (!v) return null;
+    return typeof v === 'string' ? { u: v, s: 1, x: 0, y: 0 } : v;
+  }
+
+  function setSlot(id, val) {
+    if (!id) return;
+    if (val) { slots[id] = val; tombstones.delete(id); }
+    else { delete slots[id]; if (!loaded) tombstones.add(id); }
+    subs.forEach((fn) => fn());
+    // A drop is rare + high-value — write immediately so nav-away can't lose
+    // it. Gate on the initial read so we don't overwrite a sidecar we haven't
+    // merged yet; the merge in load() keeps this change once the read lands.
+    if (loaded) save(); else load().then(save);
+  }
+
+  // ── Image downscale ─────────────────────────────────────────────────────
+  // Encode through a canvas so the sidecar carries resized bytes, not the
+  // raw upload. Longest side is capped at 2× the slot's rendered width
+  // (retina) and at MAX_DIM. WebP keeps alpha and is ~10× smaller than PNG
+  // for photos, so there's no need for per-image format picking.
+  async function toDataUrl(file, targetW) {
+    const bitmap = await createImageBitmap(file);
+    try {
+      const cap = Math.min(MAX_DIM, Math.max(1, Math.round(targetW * 2)) || MAX_DIM);
+      const scale = Math.min(1, cap / Math.max(bitmap.width, bitmap.height));
+      const w = Math.max(1, Math.round(bitmap.width * scale));
+      const h = Math.max(1, Math.round(bitmap.height * scale));
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(bitmap, 0, 0, w, h);
+      return canvas.toDataURL('image/webp', 0.85);
+    } finally {
+      bitmap.close && bitmap.close();
+    }
+  }
+
+  // ── Custom element ──────────────────────────────────────────────────────
+  const stylesheet =
+    ':host{display:inline-block;position:relative;vertical-align:top;' +
+    '  font:13px/1.3 system-ui,-apple-system,sans-serif;color:rgba(0,0,0,.55);width:240px;height:160px}' +
+    '.frame{position:absolute;inset:0;overflow:hidden;background:rgba(0,0,0,.04)}' +
+    // .frame img (clipped) and .spill (unclipped ghost + handles) share the
+    // same left/top/width/height in frame-%, computed by _applyView(), so the
+    // inside-mask crop and the outside-mask spill stay pixel-aligned.
+    '.frame img{position:absolute;max-width:none;transform:translate(-50%,-50%);' +
+    '  -webkit-user-drag:none;user-select:none;touch-action:none}' +
+    // Reframe mode (double-click): the full image spills past the mask. The
+    // spill layer is sized to the IMAGE bounds so its corners are where the
+    // resize handles belong. The ghost <img> inside is translucent; the real
+    // clipped <img> underneath shows the opaque in-mask crop.
+    '.spill{position:absolute;transform:translate(-50%,-50%);display:none;z-index:1;' +
+    '  cursor:grab;touch-action:none}' +
+    ':host([data-panning]) .spill{cursor:grabbing}' +
+    '.spill .ghost{position:absolute;inset:0;width:100%;height:100%;opacity:.35;' +
+    '  pointer-events:none;-webkit-user-drag:none;user-select:none;' +
+    '  box-shadow:0 0 0 1px rgba(0,0,0,.2),0 12px 32px rgba(0,0,0,.2)}' +
+    '.spill .handle{position:absolute;width:12px;height:12px;border-radius:50%;' +
+    '  background:#fff;box-shadow:0 0 0 1.5px #c96442,0 1px 3px rgba(0,0,0,.3);' +
+    '  transform:translate(-50%,-50%)}' +
+    '.spill .handle[data-c=nw]{left:0;top:0;cursor:nwse-resize}' +
+    '.spill .handle[data-c=ne]{left:100%;top:0;cursor:nesw-resize}' +
+    '.spill .handle[data-c=sw]{left:0;top:100%;cursor:nesw-resize}' +
+    '.spill .handle[data-c=se]{left:100%;top:100%;cursor:nwse-resize}' +
+    ':host([data-reframe]){z-index:10}' +
+    ':host([data-reframe]) .spill{display:block}' +
+    ':host([data-reframe]) .frame{box-shadow:0 0 0 2px #c96442}' +
+    '.empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;' +
+    '  justify-content:center;gap:6px;text-align:center;padding:12px;box-sizing:border-box;' +
+    '  cursor:pointer;user-select:none}' +
+    '.empty svg{opacity:.45}' +
+    '.empty .cap{max-width:90%;font-weight:500;letter-spacing:.01em}' +
+    '.empty .sub{font-size:11px}' +
+    '.empty .sub u{text-underline-offset:2px;text-decoration-color:rgba(0,0,0,.25)}' +
+    '.empty:hover .sub u{color:rgba(0,0,0,.75);text-decoration-color:currentColor}' +
+    ':host([data-over]) .frame{outline:2px solid #c96442;outline-offset:-2px;' +
+    '  background:rgba(201,100,66,.10)}' +
+    '.ring{position:absolute;inset:0;pointer-events:none;border:1.5px dashed rgba(0,0,0,.25);' +
+    '  transition:border-color .12s}' +
+    ':host([data-over]) .ring{border-color:#c96442}' +
+    ':host([data-filled]) .ring{display:none}' +
+    // Controls sit BELOW the mask (top:100%), absolutely positioned so the
+    // author-declared slot height is unaffected. The gap is padding, not a
+    // top offset, so the hover target stays contiguous with the frame.
+    '.ctl{position:absolute;top:100%;left:50%;transform:translateX(-50%);padding-top:8px;' +
+    '  display:flex;gap:6px;opacity:0;pointer-events:none;transition:opacity .12s;z-index:2;' +
+    '  white-space:nowrap}' +
+    ':host([data-filled][data-editable]:hover) .ctl,:host([data-reframe]) .ctl' +
+    '  {opacity:1;pointer-events:auto}' +
+    '.ctl button{appearance:none;border:0;border-radius:6px;padding:5px 10px;cursor:pointer;' +
+    '  background:rgba(0,0,0,.65);color:#fff;font:11px/1 system-ui,-apple-system,sans-serif;' +
+    '  backdrop-filter:blur(6px)}' +
+    '.ctl button:hover{background:rgba(0,0,0,.8)}' +
+    '.err{position:absolute;left:8px;bottom:8px;right:8px;color:#b3261e;font-size:11px;' +
+    '  background:rgba(255,255,255,.85);padding:4px 6px;border-radius:5px;pointer-events:none}';
+
+  const icon =
+    '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" ' +
+    'stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">' +
+    '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>' +
+    '<path d="m21 15-5-5L5 21"/></svg>';
+
+  class ImageSlot extends HTMLElement {
+    static get observedAttributes() {
+      return ['shape', 'radius', 'mask', 'fit', 'position', 'placeholder', 'src', 'id'];
+    }
+
+    constructor() {
+      super();
+      const root = this.attachShadow({ mode: 'open' });
+      // .spill and .ctl sit OUTSIDE .frame so overflow:hidden + border-radius
+      // on the frame (circle, pill, rounded) can't clip them.
+      root.innerHTML =
+        '<style>' + stylesheet + '</style>' +
+        '<div class="frame" part="frame">' +
+        '  <img part="image" alt="" draggable="false" style="display:none">' +
+        '  <div class="empty" part="empty">' + icon +
+        '    <div class="cap"></div>' +
+        '    <div class="sub">or <u>browse files</u></div></div>' +
+        '  <div class="ring" part="ring"></div>' +
+        '</div>' +
+        '<div class="spill">' +
+        '  <img class="ghost" alt="" draggable="false">' +
+        '  <div class="handle" data-c="nw"></div><div class="handle" data-c="ne"></div>' +
+        '  <div class="handle" data-c="sw"></div><div class="handle" data-c="se"></div>' +
+        '</div>' +
+        '<div class="ctl"><button data-act="replace" title="Replace image">Replace</button>' +
+        '  <button data-act="clear" title="Remove image">Remove</button></div>' +
+        '<input type="file" accept="' + ACCEPT.join(',') + '" hidden>';
+      this._frame = root.querySelector('.frame');
+      this._ring = root.querySelector('.ring');
+      this._img = root.querySelector('.frame img');
+      this._empty = root.querySelector('.empty');
+      this._cap = root.querySelector('.cap');
+      this._sub = root.querySelector('.sub');
+      this._spill = root.querySelector('.spill');
+      this._ghost = root.querySelector('.ghost');
+      this._err = null;
+      this._input = root.querySelector('input');
+      this._depth = 0;
+      this._gen = 0;
+      this._view = { s: 1, x: 0, y: 0 };
+      this._subFn = () => this._render();
+      // Shadow-DOM listeners live with the shadow DOM — bound once here so
+      // disconnect/reconnect (e.g. React remount) doesn't stack handlers.
+      this._empty.addEventListener('click', () => this._input.click());
+      root.addEventListener('click', (e) => {
+        const act = e.target && e.target.getAttribute && e.target.getAttribute('data-act');
+        if (act === 'replace') { this._exitReframe(true); this._input.click(); }
+        if (act === 'clear') {
+          this._exitReframe(false);
+          this._gen++;
+          this._local = null;
+          if (this.id) setSlot(this.id, null); else this._render();
+        }
+      });
+      this._input.addEventListener('change', () => {
+        const f = this._input.files && this._input.files[0];
+        if (f) this._ingest(f);
+        this._input.value = '';
+      });
+      // naturalWidth/Height aren't known until load — re-apply so the cover
+      // baseline is computed from real dimensions, not the 100%×100% fallback.
+      this._img.addEventListener('load', () => this._applyView());
+      // Gated on editable + fit=cover so share links and contain/fill slots
+      // stay static.
+      this.addEventListener('dblclick', (e) => {
+        if (!this.hasAttribute('data-editable') || !this._reframes()) return;
+        e.preventDefault();
+        if (this.hasAttribute('data-reframe')) this._exitReframe(true);
+        else this._enterReframe();
+      });
+      // Pan + resize both originate on the spill layer. A handle pointerdown
+      // drives an aspect-locked resize anchored at the opposite corner; any
+      // other pointerdown on the spill pans. Offsets are frame-% so a
+      // reframed slot survives responsive resize / PPTX export.
+      this._spill.addEventListener('pointerdown', (e) => {
+        if (e.button !== 0 || !this.hasAttribute('data-reframe')) return;
+        e.preventDefault();
+        e.stopPropagation();
+        this._spill.setPointerCapture(e.pointerId);
+        const rect = this.getBoundingClientRect();
+        const fw = rect.width || 1, fh = rect.height || 1;
+        const corner = e.target.getAttribute && e.target.getAttribute('data-c');
+        let move;
+        if (corner) {
+          // Resize about the OPPOSITE corner. Viewport-px throughout (rect
+          // fw/fh, not clientWidth) so the math survives a transform:scale()
+          // ancestor — deck_stage renders slides scaled-to-fit.
+          const iw = this._img.naturalWidth || 1, ih = this._img.naturalHeight || 1;
+          const base = Math.max(fw / iw, fh / ih);
+          const sx = corner.includes('e') ? 1 : -1;
+          const sy = corner.includes('s') ? 1 : -1;
+          const s0 = this._view.s;
+          const w0 = iw * base * s0, h0 = ih * base * s0;
+          const cx0 = (50 + this._view.x) / 100 * fw;
+          const cy0 = (50 + this._view.y) / 100 * fh;
+          const ox = cx0 - sx * w0 / 2, oy = cy0 - sy * h0 / 2;
+          const diag0 = Math.hypot(w0, h0);
+          const ux = sx * w0 / diag0, uy = sy * h0 / diag0;
+          move = (ev) => {
+            const proj = (ev.clientX - rect.left - ox) * ux +
+                         (ev.clientY - rect.top - oy) * uy;
+            const s = clampS(s0 * proj / diag0);
+            const d = diag0 * s / s0;
+            this._view.s = s;
+            this._view.x = (ox + ux * d / 2) / fw * 100 - 50;
+            this._view.y = (oy + uy * d / 2) / fh * 100 - 50;
+            this._clampView();
+            this._applyView();
+          };
+        } else {
+          this.setAttribute('data-panning', '');
+          const start = { px: e.clientX, py: e.clientY, x: this._view.x, y: this._view.y };
+          move = (ev) => {
+            this._view.x = start.x + (ev.clientX - start.px) / fw * 100;
+            this._view.y = start.y + (ev.clientY - start.py) / fh * 100;
+            this._clampView();
+            this._applyView();
+          };
+        }
+        const up = () => {
+          try { this._spill.releasePointerCapture(e.pointerId); } catch {}
+          this._spill.removeEventListener('pointermove', move);
+          this._spill.removeEventListener('pointerup', up);
+          this._spill.removeEventListener('pointercancel', up);
+          this.removeAttribute('data-panning');
+          this._dragUp = null;
+        };
+        // Stashed so _exitReframe (Escape / outside-click mid-drag) can
+        // tear the capture + listeners down synchronously.
+        this._dragUp = up;
+        this._spill.addEventListener('pointermove', move);
+        this._spill.addEventListener('pointerup', up);
+        this._spill.addEventListener('pointercancel', up);
+      });
+      // Wheel zoom stays available inside reframe mode as a trackpad nicety —
+      // zooms toward the cursor (offset' = cursor·(1-k) + offset·k).
+      this.addEventListener('wheel', (e) => {
+        if (!this.hasAttribute('data-reframe')) return;
+        e.preventDefault();
+        const r = this.getBoundingClientRect();
+        const cx = (e.clientX - r.left) / r.width * 100 - 50;
+        const cy = (e.clientY - r.top) / r.height * 100 - 50;
+        const prev = this._view.s;
+        const next = clampS(prev * Math.pow(1.0015, -e.deltaY));
+        if (next === prev) return;
+        const k = next / prev;
+        this._view.s = next;
+        this._view.x = cx * (1 - k) + this._view.x * k;
+        this._view.y = cy * (1 - k) + this._view.y * k;
+        this._clampView();
+        this._applyView();
+      }, { passive: false });
+    }
+
+    connectedCallback() {
+      // Warn once per page — an id-less slot works for the session but
+      // cannot persist, and two id-less slots would share nothing.
+      if (!this.id && !ImageSlot._warned) {
+        ImageSlot._warned = true;
+        console.warn('<image-slot> without an id will not persist its dropped image.');
+      }
+      this.addEventListener('dragenter', this);
+      this.addEventListener('dragover', this);
+      this.addEventListener('dragleave', this);
+      this.addEventListener('drop', this);
+      subs.add(this._subFn);
+      // width%/height% in _applyView encode the frame aspect at call time —
+      // a host resize (responsive grid, pane divider) would stretch the
+      // image until the next _render. Re-render on size change: _render()
+      // re-seeds _view from stored before clamp/apply, so a shrink→grow
+      // cycle round-trips instead of ratcheting x/y toward the narrower
+      // frame's clamp range.
+      this._ro = new ResizeObserver(() => this._render());
+      this._ro.observe(this);
+      load();
+      this._render();
+    }
+
+    disconnectedCallback() {
+      subs.delete(this._subFn);
+      this.removeEventListener('dragenter', this);
+      this.removeEventListener('dragover', this);
+      this.removeEventListener('dragleave', this);
+      this.removeEventListener('drop', this);
+      if (this._ro) { this._ro.disconnect(); this._ro = null; }
+      this._exitReframe(false);
+    }
+
+    _enterReframe() {
+      if (this.hasAttribute('data-reframe')) return;
+      this.setAttribute('data-reframe', '');
+      this._applyView();
+      // Close on click outside (the spill handler stopPropagation()s so
+      // in-image drags don't reach this) and on Escape. Listeners are held
+      // on the instance so _exitReframe / disconnectedCallback can detach
+      // exactly what was attached.
+      this._outside = (e) => {
+        if (e.composedPath && e.composedPath().includes(this)) return;
+        this._exitReframe(true);
+      };
+      this._esc = (e) => { if (e.key === 'Escape') this._exitReframe(true); };
+      document.addEventListener('pointerdown', this._outside, true);
+      document.addEventListener('keydown', this._esc, true);
+    }
+
+    _exitReframe(commit) {
+      if (!this.hasAttribute('data-reframe')) return;
+      if (this._dragUp) this._dragUp();
+      this.removeAttribute('data-reframe');
+      this.removeAttribute('data-panning');
+      if (this._outside) document.removeEventListener('pointerdown', this._outside, true);
+      if (this._esc) document.removeEventListener('keydown', this._esc, true);
+      this._outside = this._esc = null;
+      if (commit) this._commitView();
+    }
+
+    attributeChangedCallback() { if (this.shadowRoot) this._render(); }
+
+    // handleEvent — one listener object for all four drag events keeps the
+    // add/remove symmetric and the depth counter correct.
+    handleEvent(e) {
+      if (e.type === 'dragenter' || e.type === 'dragover') {
+        // Without preventDefault the browser never fires 'drop'.
+        e.preventDefault();
+        e.stopPropagation();
+        if (e.dataTransfer) e.dataTransfer.dropEffect = 'copy';
+        if (e.type === 'dragenter') this._depth++;
+        this.setAttribute('data-over', '');
+      } else if (e.type === 'dragleave') {
+        // dragenter/leave fire for every descendant crossing — count depth
+        // so hovering the icon inside the empty state doesn't flicker.
+        if (--this._depth <= 0) { this._depth = 0; this.removeAttribute('data-over'); }
+      } else if (e.type === 'drop') {
+        e.preventDefault();
+        e.stopPropagation();
+        this._depth = 0;
+        this.removeAttribute('data-over');
+        const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+        if (f) this._ingest(f);
+      }
+    }
+
+    async _ingest(file) {
+      this._setError(null);
+      if (!file || ACCEPT.indexOf(file.type) < 0) {
+        this._setError('Drop a PNG, JPEG, WebP, or AVIF image.');
+        return;
+      }
+      // toDataUrl can take hundreds of ms on a large photo. A Clear or a
+      // newer drop during that window would be clobbered when this await
+      // resumes — bump + capture a generation so stale encodes bail.
+      const gen = ++this._gen;
+      try {
+        const w = this.clientWidth || this.offsetWidth || MAX_DIM;
+        const url = await toDataUrl(file, w);
+        if (gen !== this._gen) return;
+        // Only exit reframe once the new image is in hand — a rejected type
+        // or decode failure leaves the in-progress crop untouched.
+        this._exitReframe(false);
+        const val = { u: url, s: 1, x: 0, y: 0 };
+        setSlot(this.id || '', val);
+        // Keep a session-local copy for id-less slots so the drop still
+        // shows, even though it cannot persist.
+        if (!this.id) { this._local = val; this._render(); }
+      } catch (err) {
+        if (gen !== this._gen) return;
+        this._setError('Could not read that image.');
+        console.warn('<image-slot> ingest failed:', err);
+      }
+    }
+
+    _setError(msg) {
+      if (this._err) { this._err.remove(); this._err = null; }
+      if (!msg) return;
+      const d = document.createElement('div');
+      d.className = 'err'; d.textContent = msg;
+      this.shadowRoot.appendChild(d);
+      this._err = d;
+      setTimeout(() => { if (this._err === d) { d.remove(); this._err = null; } }, 3000);
+    }
+
+    // Reframing (pan/resize) is only meaningful for fit=cover — contain/fill
+    // keep the old object-fit path and double-click is a no-op.
+    _reframes() {
+      return this.hasAttribute('data-filled') &&
+        (this.getAttribute('fit') || 'cover') === 'cover';
+    }
+
+    // Cover-baseline geometry, shared by clamp/apply/resize. Null until the
+    // img has loaded (naturalWidth is 0 before that) or when the slot has no
+    // layout box — ResizeObserver fires with a 0×0 rect under display:none,
+    // and clamping against a degenerate 1×1 frame would silently pull the
+    // stored pan toward zero.
+    _geom() {
+      const iw = this._img.naturalWidth, ih = this._img.naturalHeight;
+      const fw = this.clientWidth, fh = this.clientHeight;
+      if (!iw || !ih || !fw || !fh) return null;
+      return { iw, ih, fw, fh, base: Math.max(fw / iw, fh / ih) };
+    }
+
+    _clampView() {
+      // Pan range on each axis is half the overflow past the frame edge.
+      const g = this._geom();
+      if (!g) return;
+      const mx = Math.max(0, (g.iw * g.base * this._view.s / g.fw - 1) * 50);
+      const my = Math.max(0, (g.ih * g.base * this._view.s / g.fh - 1) * 50);
+      this._view.x = Math.max(-mx, Math.min(mx, this._view.x));
+      this._view.y = Math.max(-my, Math.min(my, this._view.y));
+    }
+
+    _applyView() {
+      const g = this._geom();
+      const fit = this.getAttribute('fit') || 'cover';
+      if (fit !== 'cover' || !g) {
+        // Non-cover, or dimensions not known yet (before img load).
+        this._img.style.width = '100%';
+        this._img.style.height = '100%';
+        this._img.style.left = '50%';
+        this._img.style.top = '50%';
+        this._img.style.objectFit = fit;
+        this._img.style.objectPosition = this.getAttribute('position') || '50% 50%';
+        return;
+      }
+      // Cover baseline: img fills the frame on its tighter axis at s=1, so
+      // pan works immediately on the overflowing axis without zooming first.
+      // Width/height and left/top are all frame-% — depends only on the
+      // frame aspect ratio, so a responsive resize keeps the same crop. The
+      // spill layer mirrors the same box so its corners = image corners.
+      const k = g.base * this._view.s;
+      const w = (g.iw * k / g.fw * 100) + '%';
+      const h = (g.ih * k / g.fh * 100) + '%';
+      const l = (50 + this._view.x) + '%';
+      const t = (50 + this._view.y) + '%';
+      this._img.style.width = w; this._img.style.height = h;
+      this._img.style.left = l; this._img.style.top = t;
+      this._img.style.objectFit = '';
+      this._spill.style.width = w; this._spill.style.height = h;
+      this._spill.style.left = l; this._spill.style.top = t;
+    }
+
+    _commitView() {
+      const v = { s: this._view.s, x: this._view.x, y: this._view.y };
+      if (this._userUrl) v.u = this._userUrl;
+      // Framing-only (no u) persists too so an author-src slot remembers its
+      // crop; clearing the sidecar still falls through to src=.
+      if (this.id) setSlot(this.id, v);
+      else { this._local = v; }
+    }
+
+    _render() {
+      // Shape / mask. Presets use border-radius so the dashed ring can
+      // follow the rounded outline; clip-path is only applied for an
+      // explicit `mask` (the ring is hidden there since a rectangle
+      // dashed border chopped by an arbitrary polygon looks broken).
+      const mask = this.getAttribute('mask');
+      const shape = (this.getAttribute('shape') || 'rounded').toLowerCase();
+      let radius = '';
+      if (shape === 'circle') radius = '50%';
+      else if (shape === 'pill') radius = '9999px';
+      else if (shape === 'rounded') {
+        const n = parseFloat(this.getAttribute('radius'));
+        radius = (Number.isFinite(n) ? n : 12) + 'px';
+      }
+      this._frame.style.borderRadius = mask ? '' : radius;
+      this._frame.style.clipPath = mask || '';
+      this._ring.style.borderRadius = mask ? '' : radius;
+      this._ring.style.display = mask ? 'none' : '';
+
+      // Controls and reframe entry gate on this so share links stay read-only.
+      const editable = !!(window.omelette && window.omelette.writeFile);
+      this.toggleAttribute('data-editable', editable);
+      this._sub.style.display = editable ? '' : 'none';
+
+      // Content. The sidecar is also writable by the agent's write_file
+      // tool, so its value isn't guaranteed canvas-originated — only accept
+      // data:image/ URLs from it. The `src` attribute is author-controlled
+      // (Claude wrote it into the HTML) so it passes through unchanged.
+      let stored = this.id ? getSlot(this.id) : this._local;
+      if (stored && stored.u && !/^data:image\//i.test(stored.u)) stored = null;
+      const srcAttr = this.getAttribute('src') || '';
+      this._userUrl = (stored && stored.u) || null;
+      const url = this._userUrl || srcAttr;
+      // Don't clobber an in-flight reframe with a store-triggered re-render.
+      if (!this.hasAttribute('data-reframe')) {
+        this._view = {
+          s: stored && Number.isFinite(stored.s) ? clampS(stored.s) : 1,
+          x: stored && Number.isFinite(stored.x) ? stored.x : 0,
+          y: stored && Number.isFinite(stored.y) ? stored.y : 0,
+        };
+      }
+      this._cap.textContent = this.getAttribute('placeholder') || 'Drop an image';
+      // Toggle via style.display — the [hidden] attribute alone loses to
+      // the display:flex / display:block rules in the stylesheet above.
+      if (url) {
+        if (this._img.getAttribute('src') !== url) {
+          this._img.src = url;
+          this._ghost.src = url;
+        }
+        this._img.style.display = 'block';
+        this._empty.style.display = 'none';
+        this.setAttribute('data-filled', '');
+        this._clampView();
+        this._applyView();
+      } else {
+        this._img.style.display = 'none';
+        this._img.removeAttribute('src');
+        this._ghost.removeAttribute('src');
+        this._empty.style.display = 'flex';
+        this.removeAttribute('data-filled');
+      }
+    }
+  }
+
+  if (!customElements.get('image-slot')) {
+    customElements.define('image-slot', ImageSlot);
+  }
+})();
+
+</script>
+
+<script type="text/babel">
+
+// tweaks-panel.jsx
+// Reusable Tweaks shell + form-control helpers.
+//
+// Owns the host protocol (listens for __activate_edit_mode / __deactivate_edit_mode,
+// posts __edit_mode_available / __edit_mode_set_keys / __edit_mode_dismissed) so
+// individual prototypes don't re-roll it. Ships a consistent set of controls so you
+// don't hand-draw <input type="range">, segmented radios, steppers, etc.
+//
+// Usage (in an HTML file that loads React + Babel):
+//
+//   const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+//     "primaryColor": "#D97757",
+//     "palette": ["#D97757", "#29261b", "#f6f4ef"],
+//     "fontSize": 16,
+//     "density": "regular",
+//     "dark": false
+//   }/*EDITMODE-END*/;
+//
+//   function App() {
+//     const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+//     return (
+//       <div style={{ fontSize: t.fontSize, color: t.primaryColor }}>
+//         Hello
+//         <TweaksPanel>
+//           <TweakSection label="Typography" />
+//           <TweakSlider label="Font size" value={t.fontSize} min={10} max={32} unit="px"
+//                        onChange={(v) => setTweak('fontSize', v)} />
+//           <TweakRadio  label="Density" value={t.density}
+//                        options={['compact', 'regular', 'comfy']}
+//                        onChange={(v) => setTweak('density', v)} />
+//           <TweakSection label="Theme" />
+//           <TweakColor  label="Primary" value={t.primaryColor}
+//                        options={['#D97757', '#2A6FDB', '#1F8A5B', '#7A5AE0']}
+//                        onChange={(v) => setTweak('primaryColor', v)} />
+//           <TweakColor  label="Palette" value={t.palette}
+//                        options={[['#D97757', '#29261b', '#f6f4ef'],
+//                                  ['#475569', '#0f172a', '#f1f5f9']]}
+//                        onChange={(v) => setTweak('palette', v)} />
+//           <TweakToggle label="Dark mode" value={t.dark}
+//                        onChange={(v) => setTweak('dark', v)} />
+//         </TweaksPanel>
+//       </div>
+//     );
+//   }
+//
+// ─────────────────────────────────────────────────────────────────────────────
+
+const __TWEAKS_STYLE = `
+  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
+    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+    transform:scale(var(--dc-inv-zoom,1));transform-origin:bottom right;
+    background:rgba(250,249,247,.78);color:#29261b;
+    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
+    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 8px 10px 14px;cursor:move;user-select:none}
+  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
+    width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
+  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
+    overflow-y:auto;overflow-x:hidden;min-height:0;
+    scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent}
+  .twk-body::-webkit-scrollbar{width:8px}
+  .twk-body::-webkit-scrollbar-track{background:transparent;margin:2px}
+  .twk-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:4px;
+    border:2px solid transparent;background-clip:content-box}
+  .twk-body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.25);
+    border:2px solid transparent;background-clip:content-box}
+  .twk-row{display:flex;flex-direction:column;gap:5px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;
+    color:rgba(41,38,27,.72)}
+  .twk-lbl>span:first-child{font-weight:500}
+  .twk-val{color:rgba(41,38,27,.5);font-variant-numeric:tabular-nums}
+
+  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:rgba(41,38,27,.45);padding:10px 0 0}
+  .twk-sect:first-child{padding-top:0}
+
+  .twk-field{appearance:none;box-sizing:border-box;width:100%;min-width:0;height:26px;padding:0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;
+    background:rgba(255,255,255,.6);color:inherit;font:inherit;outline:none}
+  .twk-field:focus{border-color:rgba(0,0,0,.25);background:rgba(255,255,255,.85)}
+  select.twk-field{padding-right:22px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
+    background-repeat:no-repeat;background-position:right 8px center}
+
+  .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
+    border-radius:999px;background:rgba(0,0,0,.12);outline:none}
+  .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
+    width:14px;height:14px;border-radius:50%;background:#fff;
+    border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+  .twk-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;
+    background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+
+  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
+    background:rgba(0,0,0,.06);user-select:none}
+  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
+    background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
+    transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+  .twk-seg.dragging .twk-seg-thumb{transition:none}
+  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
+    background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
+    border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2;
+    overflow-wrap:anywhere}
+
+  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
+    background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
+  .twk-toggle[data-on="1"]{background:#34c759}
+  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
+    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
+
+  .twk-num{display:flex;align-items:center;box-sizing:border-box;min-width:0;height:26px;padding:0 0 0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;background:rgba(255,255,255,.6)}
+  .twk-num-lbl{font-weight:500;color:rgba(41,38,27,.6);cursor:ew-resize;
+    user-select:none;padding-right:8px}
+  .twk-num input{flex:1;min-width:0;height:100%;border:0;background:transparent;
+    font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 8px 0 0;
+    outline:none;color:inherit;-moz-appearance:textfield}
+  .twk-num input::-webkit-inner-spin-button,.twk-num input::-webkit-outer-spin-button{
+    -webkit-appearance:none;margin:0}
+  .twk-num-unit{padding-right:8px;color:rgba(41,38,27,.45)}
+
+  .twk-btn{appearance:none;height:26px;padding:0 12px;border:0;border-radius:7px;
+    background:rgba(0,0,0,.78);color:#fff;font:inherit;font-weight:500;cursor:default}
+  .twk-btn:hover{background:rgba(0,0,0,.88)}
+  .twk-btn.secondary{background:rgba(0,0,0,.06);color:inherit}
+  .twk-btn.secondary:hover{background:rgba(0,0,0,.1)}
+
+  .twk-swatch{appearance:none;-webkit-appearance:none;width:56px;height:22px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:6px;padding:0;cursor:default;
+    background:transparent;flex-shrink:0}
+  .twk-swatch::-webkit-color-swatch-wrapper{padding:0}
+  .twk-swatch::-webkit-color-swatch{border:0;border-radius:5.5px}
+  .twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
+
+  .twk-chips{display:flex;gap:6px}
+  .twk-chip{position:relative;appearance:none;flex:1;min-width:0;height:46px;
+    padding:0;border:0;border-radius:6px;overflow:hidden;cursor:default;
+    box-shadow:0 0 0 .5px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.06);
+    transition:transform .12s cubic-bezier(.3,.7,.4,1),box-shadow .12s}
+  .twk-chip:hover{transform:translateY(-1px);
+    box-shadow:0 0 0 .5px rgba(0,0,0,.18),0 4px 10px rgba(0,0,0,.12)}
+  .twk-chip[data-on="1"]{box-shadow:0 0 0 1.5px rgba(0,0,0,.85),
+    0 2px 6px rgba(0,0,0,.15)}
+  .twk-chip>span{position:absolute;top:0;bottom:0;right:0;width:34%;
+    display:flex;flex-direction:column;box-shadow:-1px 0 0 rgba(0,0,0,.1)}
+  .twk-chip>span>i{flex:1;box-shadow:0 -1px 0 rgba(0,0,0,.1)}
+  .twk-chip>span>i:first-child{box-shadow:none}
+  .twk-chip svg{position:absolute;top:6px;left:6px;width:13px;height:13px;
+    filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
+`;
+
+// ── useTweaks ───────────────────────────────────────────────────────────────
+// Single source of truth for tweak values. setTweak persists via the host
+// (__edit_mode_set_keys → host rewrites the EDITMODE block on disk).
+function useTweaks(defaults) {
+  const [values, setValues] = React.useState(defaults);
+  // Accepts either setTweak('key', value) or setTweak({ key: value, ... }) so a
+  // useState-style call doesn't write a "[object Object]" key into the persisted
+  // JSON block.
+  const setTweak = React.useCallback((keyOrEdits, val) => {
+    const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
+      ? keyOrEdits : { [keyOrEdits]: val };
+    setValues((prev) => ({ ...prev, ...edits }));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
+    // Same-window signal so in-page listeners (deck-stage rail thumbnails)
+    // can react — the parent message only reaches the host, not peers.
+    window.dispatchEvent(new CustomEvent('tweakchange', { detail: edits }));
+  }, []);
+  return [values, setTweak];
+}
+
+// ── TweaksPanel ─────────────────────────────────────────────────────────────
+// Floating shell. Registers the protocol listener BEFORE announcing
+// availability — if the announce ran first, the host's activate could land
+// before our handler exists and the toolbar toggle would silently no-op.
+// The close button posts __edit_mode_dismissed so the host's toolbar toggle
+// flips off in lockstep; the host echoes __deactivate_edit_mode back which
+// is what actually hides the panel.
+function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children }) {
+  const [open, setOpen] = React.useState(false);
+  const dragRef = React.useRef(null);
+  // Auto-inject a rail toggle when a <deck-stage> is on the page. The
+  // toggle drives the deck's per-viewer _railVisible via window message;
+  // state is mirrored from the same localStorage key the deck reads so
+  // the control reflects reality across reloads. The mechanism is the
+  // message — authors who want custom placement can post it directly
+  // and pass noDeckControls to suppress this one.
+  const hasDeckStage = React.useMemo(
+    () => typeof document !== 'undefined' && !!document.querySelector('deck-stage'),
+    [],
+  );
+  // deck-stage enables its rail in connectedCallback, but this panel can
+  // mount before that element has upgraded. The initial read catches the
+  // common case; the listener covers mounting first. (Older deck-stage.js
+  // copies still wait for the host's __omelette_rail_enabled postMessage —
+  // same listener handles those.)
+  const [railEnabled, setRailEnabled] = React.useState(
+    () => hasDeckStage && !!document.querySelector('deck-stage')?._railEnabled,
+  );
+  React.useEffect(() => {
+    if (!hasDeckStage || railEnabled) return undefined;
+    const onMsg = (e) => {
+      if (e.data && e.data.type === '__omelette_rail_enabled') setRailEnabled(true);
+    };
+    window.addEventListener('message', onMsg);
+    return () => window.removeEventListener('message', onMsg);
+  }, [hasDeckStage, railEnabled]);
+  const [railVisible, setRailVisible] = React.useState(() => {
+    try { return localStorage.getItem('deck-stage.railVisible') !== '0'; } catch (e) { return true; }
+  });
+  const toggleRail = (on) => {
+    setRailVisible(on);
+    window.postMessage({ type: '__deck_rail_visible', on }, '*');
+  };
+  const offsetRef = React.useRef({ x: 16, y: 16 });
+  const PAD = 16;
+
+  const clampToViewport = React.useCallback(() => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const w = panel.offsetWidth, h = panel.offsetHeight;
+    const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
+    const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
+    offsetRef.current = {
+      x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
+      y: Math.min(maxBottom, Math.max(PAD, offsetRef.current.y)),
+    };
+    panel.style.right = offsetRef.current.x + 'px';
+    panel.style.bottom = offsetRef.current.y + 'px';
+  }, []);
+
+  React.useEffect(() => {
+    if (!open) return;
+    clampToViewport();
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', clampToViewport);
+      return () => window.removeEventListener('resize', clampToViewport);
+    }
+    const ro = new ResizeObserver(clampToViewport);
+    ro.observe(document.documentElement);
+    return () => ro.disconnect();
+  }, [open, clampToViewport]);
+
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      const t = e?.data?.type;
+      if (t === '__activate_edit_mode') setOpen(true);
+      else if (t === '__deactivate_edit_mode') setOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const dismiss = () => {
+    setOpen(false);
+    window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+  };
+
+  const onDragStart = (e) => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const r = panel.getBoundingClientRect();
+    const sx = e.clientX, sy = e.clientY;
+    const startRight = window.innerWidth - r.right;
+    const startBottom = window.innerHeight - r.bottom;
+    const move = (ev) => {
+      offsetRef.current = {
+        x: startRight - (ev.clientX - sx),
+        y: startBottom - (ev.clientY - sy),
+      };
+      clampToViewport();
+    };
+    const up = () => {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+    };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  };
+
+  if (!open) return null;
+  return (
+    <>
+      <style>{__TWEAKS_STYLE}</style>
+      <div ref={dragRef} className="twk-panel" data-noncommentable=""
+           style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+        <div className="twk-hd" onMouseDown={onDragStart}>
+          <b>{title}</b>
+          <button className="twk-x" aria-label="Close tweaks"
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onClick={dismiss}>✕</button>
+        </div>
+        <div className="twk-body">
+          {children}
+          {hasDeckStage && railEnabled && !noDeckControls && (
+            <TweakSection label="Deck">
+              <TweakToggle label="Thumbnail rail" value={railVisible} onChange={toggleRail} />
+            </TweakSection>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ── Layout helpers ──────────────────────────────────────────────────────────
+
+function TweakSection({ label, children }) {
+  return (
+    <>
+      <div className="twk-sect">{label}</div>
+      {children}
+    </>
+  );
+}
+
+function TweakRow({ label, value, children, inline = false }) {
+  return (
+    <div className={inline ? 'twk-row twk-row-h' : 'twk-row'}>
+      <div className="twk-lbl">
+        <span>{label}</span>
+        {value != null && <span className="twk-val">{value}</span>}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+// ── Controls ────────────────────────────────────────────────────────────────
+
+function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', onChange }) {
+  return (
+    <TweakRow label={label} value={`${value}${unit}`}>
+      <input type="range" className="twk-slider" min={min} max={max} step={step}
+             value={value} onChange={(e) => onChange(Number(e.target.value))} />
+    </TweakRow>
+  );
+}
+
+function TweakToggle({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <button type="button" className="twk-toggle" data-on={value ? '1' : '0'}
+              role="switch" aria-checked={!!value}
+              onClick={() => onChange(!value)}><i /></button>
+    </div>
+  );
+}
+
+function TweakRadio({ label, value, options, onChange }) {
+  const trackRef = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+  // The active value is read by pointer-move handlers attached for the lifetime
+  // of a drag — ref it so a stale closure doesn't fire onChange for every move.
+  const valueRef = React.useRef(value);
+  valueRef.current = value;
+
+  // Segments wrap mid-word once per-segment width runs out. The track is
+  // ~248px (280 panel − 28 body pad − 4 seg pad), each button loses 12px
+  // to its own padding, and 11.5px system-ui averages ~6.3px/char — so 2
+  // options fit ~16 chars each, 3 fit ~10. Past that (or >3 options), fall
+  // back to a dropdown rather than wrap.
+  const labelLen = (o) => String(typeof o === 'object' ? o.label : o).length;
+  const maxLen = options.reduce((m, o) => Math.max(m, labelLen(o)), 0);
+  const fitsAsSegments = maxLen <= ({ 2: 16, 3: 10 }[options.length] ?? 0);
+  if (!fitsAsSegments) {
+    // <select> emits strings — map back to the original option value so the
+    // fallback stays type-preserving (numbers, booleans) like the segment path.
+    const resolve = (s) => {
+      const m = options.find((o) => String(typeof o === 'object' ? o.value : o) === s);
+      return m === undefined ? s : typeof m === 'object' ? m.value : m;
+    };
+    return <TweakSelect label={label} value={value} options={options}
+                        onChange={(s) => onChange(resolve(s))} />;
+  }
+  const opts = options.map((o) => (typeof o === 'object' ? o : { value: o, label: o }));
+  const idx = Math.max(0, opts.findIndex((o) => o.value === value));
+  const n = opts.length;
+
+  const segAt = (clientX) => {
+    const r = trackRef.current.getBoundingClientRect();
+    const inner = r.width - 4;
+    const i = Math.floor(((clientX - r.left - 2) / inner) * n);
+    return opts[Math.max(0, Math.min(n - 1, i))].value;
+  };
+
+  const onPointerDown = (e) => {
+    setDragging(true);
+    const v0 = segAt(e.clientX);
+    if (v0 !== valueRef.current) onChange(v0);
+    const move = (ev) => {
+      if (!trackRef.current) return;
+      const v = segAt(ev.clientX);
+      if (v !== valueRef.current) onChange(v);
+    };
+    const up = () => {
+      setDragging(false);
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+
+  return (
+    <TweakRow label={label}>
+      <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown}
+           className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
+        <div className="twk-seg-thumb"
+             style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`,
+                      width: `calc((100% - 4px) / ${n})` }} />
+        {opts.map((o) => (
+          <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </TweakRow>
+  );
+}
+
+function TweakSelect({ label, value, options, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <select className="twk-field" value={value} onChange={(e) => onChange(e.target.value)}>
+        {options.map((o) => {
+          const v = typeof o === 'object' ? o.value : o;
+          const l = typeof o === 'object' ? o.label : o;
+          return <option key={v} value={v}>{l}</option>;
+        })}
+      </select>
+    </TweakRow>
+  );
+}
+
+function TweakText({ label, value, placeholder, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <input className="twk-field" type="text" value={value} placeholder={placeholder}
+             onChange={(e) => onChange(e.target.value)} />
+    </TweakRow>
+  );
+}
+
+function TweakNumber({ label, value, min, max, step = 1, unit = '', onChange }) {
+  const clamp = (n) => {
+    if (min != null && n < min) return min;
+    if (max != null && n > max) return max;
+    return n;
+  };
+  const startRef = React.useRef({ x: 0, val: 0 });
+  const onScrubStart = (e) => {
+    e.preventDefault();
+    startRef.current = { x: e.clientX, val: value };
+    const decimals = (String(step).split('.')[1] || '').length;
+    const move = (ev) => {
+      const dx = ev.clientX - startRef.current.x;
+      const raw = startRef.current.val + dx * step;
+      const snapped = Math.round(raw / step) * step;
+      onChange(clamp(Number(snapped.toFixed(decimals))));
+    };
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+  return (
+    <div className="twk-num">
+      <span className="twk-num-lbl" onPointerDown={onScrubStart}>{label}</span>
+      <input type="number" value={value} min={min} max={max} step={step}
+             onChange={(e) => onChange(clamp(Number(e.target.value)))} />
+      {unit && <span className="twk-num-unit">{unit}</span>}
+    </div>
+  );
+}
+
+// Relative-luminance contrast pick — checkmarks drawn over a swatch need to
+// read on both #111 and #fafafa without per-option configuration. Hex input
+// only (#rgb / #rrggbb); named or rgb()/hsl() colors fall through to "light".
+function __twkIsLight(hex) {
+  const h = String(hex).replace('#', '');
+  const x = h.length === 3 ? h.replace(/./g, (c) => c + c) : h.padEnd(6, '0');
+  const n = parseInt(x.slice(0, 6), 16);
+  if (Number.isNaN(n)) return true;
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  return r * 299 + g * 587 + b * 114 > 148000;
+}
+
+const __TwkCheck = ({ light }) => (
+  <svg viewBox="0 0 14 14" aria-hidden="true">
+    <path d="M3 7.2 5.8 10 11 4.2" fill="none" strokeWidth="2.2"
+          strokeLinecap="round" strokeLinejoin="round"
+          stroke={light ? 'rgba(0,0,0,.78)' : '#fff'} />
+  </svg>
+);
+
+// TweakColor — curated color/palette picker. Each option is either a single
+// hex string or an array of 1-5 hex strings; the card adapts — a lone color
+// renders solid, a palette renders colors[0] as the hero (left ~2/3) with the
+// rest stacked in a sharp column on the right. onChange emits the
+// option in the shape it was passed (string stays string, array stays array).
+// Without options it falls back to the native color input for back-compat.
+function TweakColor({ label, value, options, onChange }) {
+  if (!options || !options.length) {
+    return (
+      <div className="twk-row twk-row-h">
+        <div className="twk-lbl"><span>{label}</span></div>
+        <input type="color" className="twk-swatch" value={value}
+               onChange={(e) => onChange(e.target.value)} />
+      </div>
+    );
+  }
+  // Native <input type=color> emits lowercase hex per the HTML spec, so
+  // compare case-insensitively. String() guards JSON.stringify(undefined),
+  // which returns the primitive undefined (no .toLowerCase).
+  const key = (o) => String(JSON.stringify(o)).toLowerCase();
+  const cur = key(value);
+  return (
+    <TweakRow label={label}>
+      <div className="twk-chips" role="radiogroup">
+        {options.map((o, i) => {
+          const colors = Array.isArray(o) ? o : [o];
+          const [hero, ...rest] = colors;
+          const sup = rest.slice(0, 4);
+          const on = key(o) === cur;
+          return (
+            <button key={i} type="button" className="twk-chip" role="radio"
+                    aria-checked={on} data-on={on ? '1' : '0'}
+                    aria-label={colors.join(', ')} title={colors.join(' · ')}
+                    style={{ background: hero }}
+                    onClick={() => onChange(o)}>
+              {sup.length > 0 && (
+                <span>
+                  {sup.map((c, j) => <i key={j} style={{ background: c }} />)}
+                </span>
+              )}
+              {on && <__TwkCheck light={__twkIsLight(hero)} />}
+            </button>
+          );
+        })}
+      </div>
+    </TweakRow>
+  );
+}
+
+function TweakButton({ label, onClick, secondary = false }) {
+  return (
+    <button type="button" className={secondary ? 'twk-btn secondary' : 'twk-btn'}
+            onClick={onClick}>{label}</button>
+  );
+}
+
+Object.assign(window, {
+  useTweaks, TweaksPanel, TweakSection, TweakRow,
+  TweakSlider, TweakToggle, TweakRadio, TweakSelect,
+  TweakText, TweakNumber, TweakColor, TweakButton,
+});
+
+</script>
+
+<script type="text/babel">
+// TheFlashMode — Landing components (Lumora-style design system)
+const { useState, useEffect, useRef, useCallback } = React;
+
+/* ============================================================
+   Brand mark (Bolt + wordmark)
+============================================================ */
+function Brand({ size = 14 }) {
+  return (
+    <span className="brand-mark" style={{ fontSize: size }}>
+      <span className="bolt" aria-hidden="true"></span>
+      <span>TheFlashMode</span>
+    </span>
+  );
+}
+
+/* ============================================================
+   Two-row nav: Global (black) + Sub (frosted parchment)
+============================================================ */
+function Nav() {
+  return (
+    <React.Fragment>
+      <nav className="global-nav" aria-label="Navigation principale">
+        <div className="global-nav-inner">
+          <a className="global-nav-brand" href="#top">
+            <span className="bolt" aria-hidden="true"></span>
+            <span>TheFlashMode</span>
+          </a>
+          <div className="global-nav-links">
+            <a href="#fonctionnement">Studio</a>
+            <a href="#mannequins">Mannequins</a>
+            <a href="#galerie">Galerie</a>
+            <a href="#tarifs">Tarifs</a>
+            <a href="#pipeline">Technologie</a>
+            <a href="#temoignages">Avis</a>
+            <a href="#aide">Aide</a>
+          </div>
+          <div className="global-nav-right">
+            <a href="#recherche" aria-label="Recherche">⌕</a>
+            <a href="#connexion">Connexion</a>
+          </div>
+        </div>
+      </nav>
+      <div className="sub-nav" role="navigation" aria-label="Studio">
+        <div className="sub-nav-inner">
+          <div className="sub-nav-title">Studio</div>
+          <div className="sub-nav-links">
+            <a href="#fonctionnement">Fonctionnement</a>
+            <a href="#pipeline">Technologie</a>
+            <a href="#tarifs">Tarifs</a>
+            <a className="btn btn-primary" href="#essai">Essayer</a>
+          </div>
+        </div>
+      </div>
+    </React.Fragment>
+  );
+}
+
+/* ============================================================
+   HERO — three variants
+============================================================ */
+function HeroBeforeAfter() {
+  const [pos, setPos] = useState(52);
+  const wrapRef = useRef(null);
+  const drag = useRef(false);
+  const move = useCallback((clientX) => {
+    const r = wrapRef.current.getBoundingClientRect();
+    const p = Math.max(0, Math.min(100, ((clientX - r.left) / r.width) * 100));
+    setPos(p);
+  }, []);
+  useEffect(() => {
+    const onMove = (e) => { if (drag.current) { e.preventDefault(); move(e.touches ? e.touches[0].clientX : e.clientX); } };
+    const onUp = () => { drag.current = false; document.body.style.userSelect = ''; };
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('mouseup', onUp);
+    window.addEventListener('touchmove', onMove, { passive: false });
+    window.addEventListener('touchend', onUp);
+    return () => {
+      window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('mouseup', onUp);
+      window.removeEventListener('touchmove', onMove);
+      window.removeEventListener('touchend', onUp);
+    };
+  }, [move]);
+
+  return (
+    <div className="ba" ref={wrapRef}
+      onMouseDown={(e) => { drag.current = true; move(e.clientX); document.body.style.userSelect = 'none'; }}
+      onTouchStart={(e) => { drag.current = true; move(e.touches[0].clientX); }}
+    >
+      <image-slot id="hero-after" shape="rect" radius="2px"
+        placeholder="Après — mannequin IA habillé"
+        style={{position:'absolute', inset:0}}>
+      </image-slot>
+      <div style={{position:'absolute', inset:0, clipPath: `inset(0 ${100 - pos}% 0 0)`}}>
+        <image-slot id="hero-before" shape="rect" radius="2px"
+          placeholder="Avant — vêtement à plat"
+          style={{position:'absolute', inset:0}}>
+        </image-slot>
+      </div>
+      <div className="ba-line" style={{ left: `${pos}%` }} aria-hidden="true">
+        <div className="ba-handle" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow={Math.round(pos)} tabIndex="0">
+          <svg width="18" height="14" viewBox="0 0 20 14" fill="none">
+            <path d="M6 1 1 7l5 6M14 1l5 6-5 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div className="ba-badge ba-left">Avant — vêtement</div>
+      <div className="ba-badge ba-right">Après — IA</div>
+    </div>
+  );
+}
+
+function HeroVideo() {
+  const [frame, setFrame] = useState(0);
+  useEffect(() => {
+    const i = setInterval(() => setFrame(f => (f + 1) % 4), 1400);
+    return () => clearInterval(i);
+  }, []);
+  const labels = [
+    'Photo vêtement uploadée',
+    'Mannequin IA généré',
+    'Try-on en cours…',
+    'Visuel final HD',
+  ];
+  return (
+    <div className="ba">
+      <image-slot id={`hero-loop-${frame}`} shape="rect" radius="2px" placeholder={labels[frame]}
+        style={{position:'absolute', inset:0}}>
+      </image-slot>
+      <div className="loop-frames" aria-hidden="true">
+        {[0,1,2,3].map(i => <div key={i} className={"loop-dot" + (i === frame ? " on" : "")}></div>)}
+      </div>
+      <div className="ba-badge ba-left">{labels[frame]}</div>
+    </div>
+  );
+}
+
+function HeroStatic() {
+  return (
+    <div className="ba">
+      <image-slot id="hero-static" shape="rect" radius="2px"
+        placeholder="Visuel campagne mode — généré par TheFlashMode"
+        style={{position:'absolute', inset:0}}>
+      </image-slot>
+      <div className="ba-badge ba-left">Campagne SS26 — Maison Élise</div>
+    </div>
+  );
+}
+
+function Hero({ variant }) {
+  return (
+    <section className="hero tile" id="top">
+      <div className="wrap hero-grid">
+        <div className="hero-copy">
+          <div className="t-eyebrow fade-up">Nouveau · Studio mode IA</div>
+          <h1 className="t-hero fade-up d1">
+            Un shooting mode complet,<br/>
+            <span className="t-it">en une minute.</span>
+          </h1>
+          <p className="t-lead fade-up d2" style={{marginTop: 18}}>
+            Habillez des mannequins générés par IA avec vos propres vêtements.
+            Plus de studio, plus de retouche, plus de logistique — juste vos visuels,
+            prêts pour la campagne.
+          </p>
+          <div className="hero-ctas fade-up d3">
+            <a className="btn btn-primary" href="#essai">Commencer — 29€/mois</a>
+            <a className="btn btn-secondary-pill" href="#fonctionnement">En savoir plus</a>
+          </div>
+          <div className="hero-meta fade-up d4">
+            <span><strong className="t-body-strong">5 crédits</strong> offerts</span>
+            <span aria-hidden="true">·</span>
+            <span>Sans carte bancaire</span>
+            <span aria-hidden="true">·</span>
+            <span>Export HD multi-formats</span>
+          </div>
+        </div>
+        <div className="hero-visual fade-up d2">
+          {variant === 'video-loop' && <HeroVideo />}
+          {variant === 'static' && <HeroStatic />}
+          {(variant === 'ba-slider' || !variant) && <HeroBeforeAfter />}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   Logo strip
+============================================================ */
+function LogoStrip() {
+  const logos = ['Maison Élise', 'Bardot & Sons', 'Studio Noir', 'ATLAS', 'Volta Mode', 'Refuge', 'Index Officiel'];
+  return (
+    <section className="logo-strip">
+      <div className="wrap">
+        <div className="logo-strip-label t-caption">Choisi par des marques mode indépendantes et émergentes</div>
+        <div className="logo-strip-row">
+          {logos.map(l => <span key={l}>{l}</span>)}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   PROBLEM — economic argument
+============================================================ */
+function Problem() {
+  const items = [
+    { label: 'Mannequin pro',     range: '500 — 5 000 €', sub: '/ jour' },
+    { label: 'Photographe mode',  range: '800 — 3 000 €', sub: '/ jour' },
+    { label: 'Location studio',   range: '300 — 1 000 €', sub: '/ jour' },
+    { label: 'Retoucheur',        range: '200 — 500 €',   sub: '/ image' },
+  ];
+  return (
+    <section className="tile parchment" id="probleme">
+      <div className="wrap">
+        <div className="problem-grid">
+          <div>
+            <div className="t-eyebrow">Le problème</div>
+            <h2 className="t-display-lg" style={{marginTop: 14}}>
+              Une campagne mode standard mobilise quatre métiers et trois jours.
+            </h2>
+            <p className="t-lead" style={{marginTop: 18}}>
+              TheFlashMode remplace l'intégralité de ce processus par un abonnement
+              mensuel — accessible à toute marque, quelle que soit sa taille.
+            </p>
+            <div className="problem-result">
+              <span className="t-caption" style={{display:'block', marginBottom: 6}}>Total chez TheFlashMode</span>
+              <span className="problem-price t-num">29<span style={{fontSize:'0.32em', fontWeight: 400}}>€/mois</span></span>
+              <span className="problem-included t-caption">50 crédits · 4 à 8 visuels par session · Export HD inclus</span>
+            </div>
+          </div>
+          <ul className="problem-list" role="list">
+            {items.map((it, i) => (
+              <li key={it.label} className="problem-row">
+                <span className="problem-row-num t-num t-caption">0{i+1}</span>
+                <div>
+                  <div className="t-body-strong">{it.label}</div>
+                  <div className="t-caption">approche traditionnelle</div>
+                </div>
+                <div className="problem-row-price">
+                  <div className="t-body-strong t-num">{it.range}</div>
+                  <div className="t-caption">{it.sub}</div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   HOW IT WORKS — 3 steps
+============================================================ */
+function HowItWorks() {
+  const steps = [
+    { n: '01', title: 'Déposez votre vêtement.',
+      body: 'Une simple photo studio (à plat, sur cintre, fond blanc). Drag & drop, validation instantanée — JPG · PNG · WebP.',
+      placeholder: 'Photo produit — pull cachemire' },
+    { n: '02', title: 'Décrivez votre mannequin.',
+      body: 'Sélecteurs visuels — genre, morphologie, ethnie, âge, pose, fond — ou phrase libre type "femme 30 ans, peau dorée, fond studio crème".',
+      placeholder: 'Critères mannequin IA' },
+    { n: '03', title: 'Téléchargez vos visuels.',
+      body: '4 à 8 variantes générées en moins de 90 secondes. Retouche légère intégrée, export multi-résolutions (web · print · réseaux).',
+      placeholder: 'Grille résultats × 8 variantes' },
+  ];
+  return (
+    <section className="tile" id="fonctionnement">
+      <div className="wrap">
+        <header className="section-head">
+          <div className="t-eyebrow">Comment ça marche</div>
+          <h2 className="t-display-lg" style={{marginTop: 14}}>
+            Trois étapes. Quatre-vingt-dix secondes.
+          </h2>
+        </header>
+        <div className="how-grid">
+          {steps.map((s, i) => (
+            <article key={s.n} className="how-step fade-up" style={{animationDelay: `${i*120}ms`}}>
+              <div className="how-num t-num">{s.n}</div>
+              <div className="how-thumb">
+                <image-slot id={`step-${s.n}`} shape="rect" radius="8px" placeholder={s.placeholder}></image-slot>
+              </div>
+              <h3 className="t-display-md">{s.title}</h3>
+              <p className="t-body" style={{color:'var(--ink-muted-80)', marginTop: 8, marginBottom: 0}}>{s.body}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   AI PIPELINE — dark tile
+============================================================ */
+function Pipeline() {
+  const items = [
+    { tag: 'GPT-4o',      title: 'Interprétation', body: 'Vos critères en langage naturel sont traduits en prompt optimisé.', cost: '0,01 $' },
+    { tag: 'GPT-Image-1', title: 'Mannequin',       body: 'Génération d\'une photo réaliste du mannequin selon le prompt.', cost: '0,04 $' },
+    { tag: 'Fashn.ai',    title: 'Virtual Try-On',  body: 'Habillage pixel-perfect du mannequin avec votre vêtement réel × 4.', cost: '0,16 $' },
+  ];
+  return (
+    <section className="tile dark" id="pipeline">
+      <div className="wrap">
+        <header className="section-head">
+          <div className="t-eyebrow">Sous le capot</div>
+          <h2 className="t-display-lg" style={{marginTop: 14, color:'#fff'}}>
+            Trois IA de pointe. Une seule session.
+          </h2>
+          <p className="t-lead" style={{marginTop: 18}}>
+            Coût total API par session — incluant 4 à 8 visuels finaux HD :
+            {' '}<strong style={{color:'#fff'}} className="t-num">0,21 $</strong>.
+          </p>
+        </header>
+        <div className="pipeline">
+          {items.map((it, i) => (
+            <React.Fragment key={it.title}>
+              <article className="pipe-card">
+                <div className="pipe-tag chip dark">{it.tag}</div>
+                <h3 className="t-display-md" style={{marginTop: 18, color:'#fff'}}>{it.title}</h3>
+                <p className="t-body" style={{color:'var(--body-muted)', marginTop: 8}}>{it.body}</p>
+                <div className="pipe-cost t-caption t-num">≈ {it.cost}</div>
+              </article>
+              {i < items.length - 1 && <div className="pipe-arrow" aria-hidden="true">→</div>}
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   MODELS — marketplace teaser
+============================================================ */
+function Models() {
+  const models = [
+    { name: 'Aïssa K.',  tags: ['Femme · 28', 'Editorial'],     celeb: false },
+    { name: 'Lior B.',   tags: ['Homme · 31', 'Sportswear'],    celeb: false },
+    { name: 'Soraya M.', tags: ['Femme · 24', 'Haute couture'], celeb: true },
+    { name: 'Tomás R.',  tags: ['Homme · 35', 'Casual urbain'], celeb: false },
+    { name: 'Iris D.',   tags: ['Non-binaire · 26', 'Avant-garde'], celeb: false },
+    { name: 'Naomi V.',  tags: ['Femme · 29', 'Beauté luxe'],   celeb: true },
+  ];
+  return (
+    <section className="tile" id="mannequins">
+      <div className="wrap">
+        <header className="section-head section-head-row">
+          <div>
+            <div className="t-eyebrow">Marketplace mannequins</div>
+            <h2 className="t-display-lg" style={{marginTop: 14, maxWidth: 720}}>
+              Travaillez avec de vrais mannequins. Sans casting, sans contrat.
+            </h2>
+          </div>
+          <p className="t-lead" style={{maxWidth: 420}}>
+            Une marketplace de mannequins ayant cédé leurs droits à l'image, rémunérés
+            automatiquement à chaque utilisation via royalties.
+          </p>
+        </header>
+        <div className="models-carousel">
+          {models.map((m, i) => (
+            <article key={m.name} className="model-card fade-up" style={{animationDelay:`${i*60}ms`}}>
+              <div className="model-portrait">
+                <image-slot id={`model-${i}`} shape="rect" radius="2px" placeholder={`Portrait ${m.name}`}></image-slot>
+                {m.celeb && <span className="badge-celeb">★ Célébrité</span>}
+              </div>
+              <div className="model-meta">
+                <div className="t-body-strong">{m.name}</div>
+                <div className="t-caption">{m.tags.join(' · ')}</div>
+              </div>
+            </article>
+          ))}
+        </div>
+        <div className="models-cta">
+          <a className="link" href="#mannequins">Voir tous les mannequins partenaires</a>
+          <a className="link" href="#candidature">Vous êtes mannequin ? Postulez</a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   GALLERY — store-style 18px cards (matches design system)
+============================================================ */
+function Gallery() {
+  const items = [
+    { brand: 'Maison Élise',   meta: 'Robe d\'été · 1 240 ♥' },
+    { brand: 'Volta Mode',     meta: 'Veste cuir · 871 ♥' },
+    { brand: 'Refuge',         meta: 'Pull mailles · 642 ♥' },
+    { brand: 'ATLAS',          meta: 'Sneakers · 1 893 ♥' },
+    { brand: 'Bardot & Sons',  meta: 'Trench · 524 ♥' },
+    { brand: 'Studio Noir',    meta: 'Total look · 1 102 ♥' },
+    { brand: 'Index Officiel', meta: 'Sac à main · 778 ♥' },
+    { brand: 'Lume Studio',    meta: 'Maillot · 446 ♥' },
+  ];
+  return (
+    <section className="tile parchment" id="galerie">
+      <div className="wrap">
+        <header className="section-head section-head-row">
+          <div>
+            <div className="t-eyebrow">Galerie publique</div>
+            <h2 className="t-display-lg" style={{marginTop: 14}}>
+              Vu sur TheFlashMode cette semaine.
+            </h2>
+          </div>
+          <a className="btn btn-secondary-pill" href="#galerie">Explorer la galerie</a>
+        </header>
+        <div className="gallery-grid">
+          {items.map((it, i) => (
+            <article key={i} className="store-card fade-up" style={{animationDelay:`${i*40}ms`}}>
+              <div className="store-card-img">
+                <image-slot id={`g-${i}`} shape="rect" radius="8px" placeholder={`Visuel ${it.brand}`}></image-slot>
+              </div>
+              <div className="store-card-meta">
+                <span className="name">{it.brand}</span>
+                <span className="sub">{it.meta}</span>
+              </div>
+              <a className="link" href="#galerie">Voir</a>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   TESTIMONIALS
+============================================================ */
+function Testimonials() {
+  const quotes = [
+    { quote: "Pour notre dropshipping mode, on faisait une campagne tous les 3 mois. Maintenant on en sort une par semaine, au même budget annuel.",
+      who: 'Camille Vidal', role: 'Co-fondatrice, Maison Élise' },
+    { quote: "Le rendu Fashn.ai est bluffant. Mes clients ne distinguent plus les visuels IA des photos studio — et notre taux de conversion a grimpé de 22%.",
+      who: 'Marc Estève', role: 'Directeur e-commerce, Volta Mode' },
+    { quote: "Le système de royalties est honnête. Mon profil tourne, je gagne sans casting, sans déplacement. C'est un nouveau métier qui se dessine.",
+      who: 'Soraya M.', role: 'Mannequin partenaire' },
+  ];
+  return (
+    <section className="tile" id="temoignages">
+      <div className="wrap">
+        <div className="t-eyebrow">Ils nous utilisent</div>
+        <div className="testimonials">
+          {quotes.map((q, i) => (
+            <figure key={i} className="t-card fade-up" style={{animationDelay:`${i*120}ms`}}>
+              <blockquote className="t-display-md" style={{margin: 0, fontWeight: 600}}>
+                <span style={{color:'var(--primary)'}}>“</span>{q.quote}<span style={{color:'var(--primary)'}}>”</span>
+              </blockquote>
+              <figcaption className="t-caption" style={{marginTop: 22}}>
+                <strong className="t-body-strong" style={{display:'block', color:'var(--ink)'}}>{q.who}</strong>
+                {q.role}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   PRICING preview — 4 plans (white cards, featured = ink)
+============================================================ */
+function Pricing() {
+  const plans = [
+    { name: 'Free',       price: '0',   period: '/mois', credits: '5 crédits',     desc: 'Pour découvrir. Watermark sur les exports.',           cta: 'Créer un compte',  features: ['5 crédits / mois','Mannequins IA','Export web','—'] },
+    { name: 'Starter',    price: '29',  period: '/mois', credits: '50 crédits',    desc: 'Pour les marques émergentes qui sortent une campagne par mois.', cta: 'Commencer Starter', features: ['50 crédits / mois','Mannequins IA + réels','Export HD','10 projets'] },
+    { name: 'Pro',        price: '79',  period: '/mois', credits: '200 crédits',   desc: 'Pour les e-commerçants à volume avec workspace équipe.',          cta: 'Choisir Pro',      features: ['200 crédits / mois','Workspace 3 membres','Analytics avancés','Rapports exportables'], featured: true },
+    { name: 'Entreprise', price: '199', period: '/mois', credits: 'Illimités',     desc: 'Crédits illimités, accès API, Account Manager dédié.',           cta: 'Parler à un expert', features: ['Crédits illimités','Accès API complet','Account Manager','Workspace illimité'] },
+  ];
+  return (
+    <section className="tile pearl" id="tarifs">
+      <div className="wrap">
+        <header className="section-head center">
+          <div className="t-eyebrow">Tarifs</div>
+          <h2 className="t-display-lg" style={{marginTop: 14}}>
+            Quatre plans. Aucune surprise.
+          </h2>
+          <p className="t-lead" style={{marginTop: 18}}>
+            1 crédit = 1 session complète = 4 à 8 visuels finaux. Résiliable à tout moment.
+          </p>
+        </header>
+        <div className="pricing">
+          {plans.map(p => (
+            <article key={p.name} className={"price-card" + (p.featured ? " featured" : "")}>
+              {p.featured && <div className="price-flag">Le plus choisi</div>}
+              <header className="price-head">
+                <div className="t-body-strong">{p.name}</div>
+                <div className="price-amount">
+                  <span className="t-num" style={{fontFamily:'var(--font-headline)', fontSize: '56px', fontWeight: 'var(--headline-weight)', lineHeight: 1, letterSpacing: '-0.03em'}}>{p.price}</span>
+                  <span style={{fontSize: 17, marginLeft: 4, opacity: 0.7}}>€{p.period}</span>
+                </div>
+                <div className="t-caption price-credits" style={{marginTop: 4}}>{p.credits}</div>
+              </header>
+              <p className="t-body" style={{minHeight: 64}}>{p.desc}</p>
+              <ul className="price-features">
+                {p.features.map(f => (
+                  <li key={f} className="t-body" style={{fontSize: 15}}>
+                    <span className="price-check" aria-hidden="true">✓</span> {f}
+                  </li>
+                ))}
+              </ul>
+              <a className={"btn " + (p.featured ? "btn-primary" : "btn-secondary-pill")} href="#essai" style={{width: '100%'}}>{p.cta}</a>
+            </article>
+          ))}
+        </div>
+        <div style={{textAlign:'center', marginTop: 32}}>
+          <a className="link" href="#tarifs">Voir le détail complet & FAQ</a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   FINAL CTA (dark)
+============================================================ */
+function FinalCTA() {
+  return (
+    <section className="tile dark" id="essai" style={{textAlign:'center'}}>
+      <div className="wrap-narrow" style={{margin: '0 auto'}}>
+        <div className="t-eyebrow">Commencer maintenant</div>
+        <h2 className="t-display-lg" style={{marginTop: 18, color:'#fff'}}>
+          Cinq crédits offerts. Sans carte bancaire.
+        </h2>
+        <p className="t-lead" style={{marginTop: 18, marginLeft:'auto', marginRight:'auto'}}>
+          Générez votre première campagne mode en moins de deux minutes.
+          Vous gardez tous les droits sur vos visuels.
+        </p>
+        <div style={{display:'flex', gap: 10, justifyContent:'center', marginTop: 28, flexWrap:'wrap'}}>
+          <a className="btn btn-primary" href="#inscription">Créer mon compte</a>
+          <a className="btn btn-secondary-pill" href="#demo">Demander une démo</a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   Floating sticky bar — appears as you scroll
+============================================================ */
+function StickyBar() {
+  return (
+    <div className="sticky-bar">
+      <span className="t-body">
+        À partir de <strong>29€/mois</strong> · 50 crédits inclus · résiliable à tout moment.
+      </span>
+      <a className="btn btn-primary" href="#essai">Commencer</a>
+    </div>
+  );
+}
+
+/* ============================================================
+   FOOTER
+============================================================ */
+function Footer() {
+  return (
+    <footer className="footer">
+      <div className="footer-inner">
+        <div>
+          <Brand />
+          <p className="t-caption" style={{maxWidth: 320, marginTop: 14, lineHeight: 1.5}}>
+            Plateforme SaaS de génération de visuels mode par IA.
+            Habillez des mannequins générés par IA avec vos propres vêtements.
+          </p>
+          <form className="newsletter" onSubmit={(e) => e.preventDefault()}>
+            <input type="email" placeholder="Votre email" aria-label="Email" />
+            <button className="btn btn-primary" type="submit" style={{padding:'8px 16px', fontSize:14}}>S'abonner</button>
+          </form>
+        </div>
+        <div className="footer-col">
+          <h4>Produit</h4>
+          <ul>
+            <li><a href="#fonctionnement">Fonctionnement</a></li>
+            <li><a href="#tarifs">Tarifs</a></li>
+            <li><a href="#galerie">Galerie</a></li>
+            <li><a href="#mannequins">Mannequins</a></li>
+            <li><a href="#api">API</a></li>
+          </ul>
+        </div>
+        <div className="footer-col">
+          <h4>Mannequins</h4>
+          <ul>
+            <li><a href="#candidature">Devenir mannequin</a></li>
+            <li><a href="#royalties">Royalties</a></li>
+            <li><a href="#contrat">Droits à l'image</a></li>
+            <li><a href="#celeb">Programme Célébrité</a></li>
+          </ul>
+        </div>
+        <div className="footer-col">
+          <h4>Ressources</h4>
+          <ul>
+            <li><a href="#blog">Journal</a></li>
+            <li><a href="#cas">Études de cas</a></li>
+            <li><a href="#aide">Centre d'aide</a></li>
+            <li><a href="#parrain">Parrainage</a></li>
+          </ul>
+        </div>
+        <div className="footer-col">
+          <h4>Société</h4>
+          <ul>
+            <li><a href="#about">À propos</a></li>
+            <li><a href="#presse">Presse</a></li>
+            <li><a href="#carrieres">Carrières</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div className="footer-legal">
+        <span>© 2026 TheFlashMode SAS · Paris · Tous droits réservés.</span>
+        <span style={{display:'flex', gap: 18, flexWrap:'wrap'}}>
+          <a href="#mentions">Mentions légales</a>
+          <a href="#cgu">CGU</a>
+          <a href="#confidentialite">Confidentialité</a>
+          <a href="#cookies">Cookies</a>
+        </span>
+      </div>
+    </footer>
+  );
+}
+
+Object.assign(window, {
+  Brand, Nav, Hero, LogoStrip, Problem, HowItWorks, Pipeline,
+  Models, Gallery, Testimonials, Pricing, FinalCTA, StickyBar, Footer,
+});
+
+</script>
+
+<script type="text/babel">
+// TheFlashMode — App shell with Tweaks
+const { useState, useEffect } = React;
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "theme": "light",
+  "typo": "neutral",
+  "hero": "ba-slider",
+  "density": "airy"
+}/*EDITMODE-END*/;
+
+function App() {
+  const [tweaks, setTweak] = useTweaks(TWEAK_DEFAULTS);
+
+  // Apply tweak classes to <body>
+  useEffect(() => {
+    const b = document.body;
+    b.classList.remove('theme-light', 'theme-dark', 'theme-sepia');
+    b.classList.add(`theme-${tweaks.theme}`);
+    b.classList.remove('type-editorial', 'type-neutral', 'type-display');
+    b.classList.add(`type-${tweaks.typo}`);
+    b.classList.remove('density-airy', 'density-compact');
+    b.classList.add(`density-${tweaks.density}`);
+  }, [tweaks.theme, tweaks.typo, tweaks.density]);
+
+  return (
+    <React.Fragment>
+      <Nav />
+      <main>
+        <Hero variant={tweaks.hero} />
+        <LogoStrip />
+        <Problem />
+        <HowItWorks />
+        <Pipeline />
+        <Models />
+        <Gallery />
+        <Testimonials />
+        <Pricing />
+        <FinalCTA />
+        <StickyBar />
+      </main>
+      <Footer />
+
+      <TweaksPanel title="Tweaks">
+        <TweakSection title="Palette">
+          <TweakRadio
+            label="Mode"
+            value={tweaks.theme}
+            onChange={(v) => setTweak('theme', v)}
+            options={[
+              { value: 'light', label: 'Clair' },
+              { value: 'dark', label: 'Sombre' },
+              { value: 'sepia', label: 'Sépia' },
+            ]}
+          />
+        </TweakSection>
+        <TweakSection title="Typographie des titres">
+          <TweakRadio
+            label="Style"
+            value={tweaks.typo}
+            onChange={(v) => setTweak('typo', v)}
+            options={[
+              { value: 'editorial', label: 'Serif éditorial' },
+              { value: 'neutral', label: 'Sans neutre' },
+              { value: 'display', label: 'Display bold' },
+            ]}
+          />
+        </TweakSection>
+        <TweakSection title="Hero">
+          <TweakSelect
+            label="Variante"
+            value={tweaks.hero}
+            onChange={(v) => setTweak('hero', v)}
+            options={[
+              { value: 'ba-slider', label: 'Slider avant / après (interactif)' },
+              { value: 'video-loop', label: 'Vidéo loop (4 étapes)' },
+              { value: 'static', label: 'Image fixe — campagne' },
+            ]}
+          />
+        </TweakSection>
+        <TweakSection title="Densité">
+          <TweakRadio
+            label="Espacement"
+            value={tweaks.density}
+            onChange={(v) => setTweak('density', v)}
+            options={[
+              { value: 'airy', label: 'Aéré premium' },
+              { value: 'compact', label: 'Compact business' },
+            ]}
+          />
+        </TweakSection>
+      </TweaksPanel>
+    </React.Fragment>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('app'));
+root.render(<App />);
+
+</script>
+</body>
+</html>
