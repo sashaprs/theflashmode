@@ -1,0 +1,891 @@
+CAHIER DES CHARGES
+TheFlashMode
+Plateforme SaaS de génération de visuels mode par IA
+Version
+1.0
+Date
+Mai 2026
+Statut
+Document de référence
+1. Introduction Générale
+1.1 Présentation du projet
+TheFlashMode est une plateforme SaaS web permettant aux professionnels de la mode, TPE, PME et au grand public de générer des visuels mode professionnels en habillant des mannequins créés par IA avec leurs propres vêtements photographiés.
+La plateforme intègre également une marketplace de vrais mannequins ayant cédé leurs droits à l&apos;image en échange d&apos;un système de royalties automatisé — avec une ambition claire de montée en gamme vers des célébrités et des stars de cinéma.
+1.2 Problème résolu
+Aujourd&apos;hui, une campagne photo mode standard requiert :
+Un mannequin professionnel : 500 à 5 000 € / jour
+Un photographe de mode : 800 à 3 000 € / jour
+La location d&apos;un studio : 300 à 1 000 € / jour
+Un retoucheur : 200 à 500 € / image
+TheFlashMode remplace l&apos;intégralité de ce processus par un abonnement mensuel unique à partir de 29€, rendant le shooting mode accessible à toute entreprise, quelle que soit sa taille.
+1.3 Cible utilisateur
+Segment
+Description
+Usage principal
+Primaire
+TPE/PME de la mode, créateurs indépendants, marques émergentes
+Génération de visuels produits réguliers
+Secondaire
+Grandes marques et distributeurs
+Campagnes à volume élevé, accès API
+Tertiaire
+Grand public, influenceurs, stylistes freelance
+Projets ponctuels, galerie publique
+Mannequins
+Vrais mannequins cherchant à monétiser leur image
+Revenus passifs via royalties
+1.4 Stack technique
+Technologie
+Usage
+Rôle
+React TSX + Vite
+Frontend
+Interface utilisateur SPA, performance maximale
+Tailwind CSS
+Styling
+Design system cohérent, développement rapide
+Firebase (Firestore, Auth, Storage, Functions, Hosting)
+Backend / BDD
+Base de données temps réel, authentification, stockage fichiers
+GPT-4o (OpenAI)
+LLM
+Interprétation des critères en langage naturel, traduction en prompts
+GPT-Image-1 (OpenAI)
+IA Génération
+Création du mannequin IA selon les critères définis
+Fashn.ai
+IA Try-On
+Habillage pixel-perfect du mannequin avec le vêtement uploadé
+Stripe
+Paiements
+Abonnements, achats de crédits, portail de facturation
+SendGrid
+Emailing
+Emails transactionnels et notifications
+1.5 Architecture de la génération IA
+Le processus de génération suit un pipeline en 3 étapes séquentielles :
+Étape
+API utilisée
+Action
+Coût estimé
+1. Interprétation
+GPT-4o
+Traduit les critères utilisateur (texte libre ou sélecteurs) en prompt optimisé
+~0,01 $
+2. Génération mannequin
+GPT-Image-1
+Génère une photo réaliste du mannequin selon le prompt
+~0,04 $
+3. Virtual Try-On
+Fashn.ai
+Habille le mannequin généré avec le vêtement réel uploadé (×4 variantes)
+~0,16 $
+Total par session
+—
+Coût API total pour 4 à 8 visuels finaux
+~0,21 $
+2. Description des Fonctionnalités
+Module 1 — Génération IA (Cœur du produit)
+#
+Fonctionnalité
+Description
+1.1
+Upload de produit
+Dépôt de la photo du vêtement (fond blanc, à plat, sur cintre). Drag &amp; drop, preview instantané, validation format.
+1.2
+Critères mannequin IA
+Interface de sélection visuelle : genre, ethnie, morphologie, âge, pose, expression, type de fond.
+1.3
+Saisie libre via LLM
+Champ texte libre type : &quot;femme 30 ans, peau dorée, cheveux bouclés, fond studio blanc&quot;. Traitement par GPT-4o.
+1.4
+Génération multi-variantes
+Génération de 4 à 8 visuels par session, chacun avec une légère variation de pose ou d&apos;angle.
+1.5
+Éditeur de retouche légère
+Recadrage, luminosité, contraste, saturation, remplacement de fond, repositionnement.
+1.6
+Régénération ciblée
+Possibilité de relancer uniquement le visage, le fond ou la pose d&apos;un visuel insatisfaisant.
+1.7
+Export HD multi-formats
+Téléchargement en JPEG, PNG, WebP dans les résolutions : web (1080px), print (3000px), réseaux sociaux.
+Module 2 — Marketplace de vrais mannequins
+#
+Fonctionnalité
+Description
+2.1
+Profil mannequin
+Fiche complète avec mensurations, portfolio photos, caractéristiques physiques et droits d&apos;image accordés.
+2.2
+Sélection vrai mannequin
+Choix d&apos;un mannequin partenaire dont la likeness est utilisée pour la génération IA.
+2.3
+Système de royalties auto
+Calcul et mise en file d&apos;un versement au mannequin à chaque utilisation de son profil.
+2.4
+Dashboard mannequin
+Suivi en temps réel des gains, des utilisations, du classement de popularité.
+2.5
+Candidature mannequin
+Formulaire multi-étapes avec upload photos et signature électronique des droits à l&apos;image.
+2.6
+Statut Célébrité
+Badge Premium sur les profils stars, tarif d&apos;utilisation plus élevé, mise en avant exclusive.
+Module 3 — Workspace &amp; Gestion de projets
+#
+Fonctionnalité
+Description
+3.1
+Projets / Collections
+Organiser les générations par campagne ou par produit, avec nom, description et statut.
+3.2
+Historique des générations
+Accès complet à toutes les images produites, re-téléchargeables à tout moment.
+3.3
+Favoris &amp; Sélection
+Marquer les visuels pour export groupé ou archivage rapide.
+3.4
+Profil de marque
+Logo, nom, couleurs mémorisés pour cohérence visuelle et autofill des projets.
+3.5
+Partage d&apos;équipe
+Invitation de collaborateurs sur un workspace partagé (plan Pro et supérieur).
+Module 4 — Abonnements &amp; Crédits
+#
+Fonctionnalité
+Description
+4.1
+Plans d&apos;abonnement
+4 niveaux : Free (5 crédits/mois), Starter (29€ / 50 crédits), Pro (79€ / 200 crédits), Entreprise (199€ / illimité).
+4.2
+Système de crédits
+1 crédit = 1 session complète = 4 à 8 visuels finaux. Décompte affiché à chaque étape.
+4.3
+Achat à la carte
+Packs de crédits supplémentaires sans abonnement (10 crédits, 50 crédits, 100 crédits).
+4.4
+Gestion de facturation
+Portail Stripe intégré : historique, factures PDF, modification de plan, résiliation.
+4.5
+Alerte crédits bas
+Notification in-app et email à 20% et 5% de crédits restants.
+Module 5 — Dashboard &amp; Analytics
+#
+Fonctionnalité
+Description
+5.1
+Dashboard utilisateur
+Vue synthétique : crédits restants, projets actifs, dernières générations, barre de progression XP.
+5.2
+Analytics de campagne
+Visuels les plus exportés, taux de régénération, mannequins les plus utilisés.
+5.3
+Rapports téléchargeables
+Export PDF/CSV des statistiques d&apos;utilisation (plan Pro et Entreprise uniquement).
+Module 6 — Communauté &amp; Social
+#
+Fonctionnalité
+Description
+6.1
+Galerie publique
+Showcase opt-in des meilleures générations, filtrée et modérée par l&apos;admin.
+6.2
+Profil public de marque
+Page publique de la marque présentant ses visuels partagés et son identité.
+6.3
+Likes &amp; Inspirations
+Réaction publique aux visuels. Les créations likées gagnent des points XP.
+Module 7 — Gamification
+#
+Fonctionnalité
+Description
+7.1
+Points XP
+Gagnés à chaque génération, export, connexion quotidienne, publication en galerie.
+7.2
+Badges &amp; Niveaux
+&quot;Première génération&quot;, &quot;10 campagnes&quot;, &quot;Mannequin favori&quot;, &quot;Ambassadeur&quot;. 5 niveaux de compte.
+7.3
+Programme de parrainage
+Crédits offerts pour chaque utilisateur invité ayant souscrit un abonnement.
+7.4
+Classement marques
+Top 10 des marques les plus actives sur la galerie publique (mensuel).
+Module 8 — Notifications &amp; Communication
+#
+Fonctionnalité
+Description
+8.1
+Notifications in-app
+Génération terminée, crédits bas, nouveau mannequin disponible, badge obtenu.
+8.2
+Emails transactionnels
+Confirmation inscription, facture, rapport hebdomadaire, royalties versées.
+8.3
+Newsletter
+Actualités de la plateforme, mannequins stars ajoutés, nouveautés fonctionnelles (opt-in).
+Module 9 — Administration (Back-office)
+#
+Fonctionnalité
+Description
+9.1
+Gestion utilisateurs
+Voir, suspendre, modifier les plans, exporter les données.
+9.2
+Modération galerie
+File de modération : approuver, rejeter ou mettre en avant un visuel.
+9.3
+Validation mannequins
+Vérification des candidatures, validation des contrats, activation des profils.
+9.4
+Suivi financier
+Revenus totaux, royalties dues et versées, export comptable CSV.
+3. Architecture de la Base de Données Firebase
+3.1 Vue d&apos;ensemble des collections
+Collection
+Description
+Accès
+users
+Profils utilisateurs, rôles, crédits, XP, badges
+Auth — propre document uniquement
+brands
+Profils de marques liés aux utilisateurs
+Auth — propre document uniquement
+projects
+Projets / campagnes de génération
+Auth — propre userId
+generations
+Toutes les sessions de génération et leurs résultats
+Auth — propre userId
+models
+Profils des mannequins partenaires (vrais)
+Lecture publique — écriture admin
+subscriptions
+Abonnements Stripe actifs
+Auth — propre userId
+transactions
+Historique de toutes les transactions
+Auth — propre userId / Admin
+royalties
+Calcul et suivi des versements aux mannequins
+Admin + mannequin concerné
+notifications
+Notifications in-app des utilisateurs
+Auth — propre userId
+gallery
+Visuels publiés en galerie publique
+Lecture publique — écriture auth
+3.2 Structure des documents clés
+Collection : users
+Champ
+Type
+Description
+uid
+string
+Identifiant Firebase Auth
+email
+string
+Adresse email
+displayName
+string
+Nom affiché
+role
+enum
+&apos;user&apos; | &apos;model&apos; | &apos;admin&apos;
+plan
+enum
+&apos;free&apos; | &apos;starter&apos; | &apos;pro&apos; | &apos;enterprise&apos;
+credits
+number
+Crédits disponibles
+xp
+number
+Points d&apos;expérience totaux
+level
+number
+Niveau gamification (1 à 5)
+badges
+string[]
+Liste des badges obtenus
+referralCode
+string
+Code de parrainage unique
+referredBy
+string | null
+userId du parrain
+createdAt
+timestamp
+Date de création du compte
+notificationPrefs
+object
+Préférences de notifications
+Collection : generations
+Champ
+Type
+Description
+userId
+string
+Référence à users/{userId}
+projectId
+string
+Référence à projects/{projectId}
+garmentUrl
+string
+URL Firebase Storage du vêtement uploadé
+modelType
+enum
+&apos;ai&apos; | &apos;real&apos; — type de mannequin sélectionné
+modelId
+string | null
+Si mannequin réel, référence à models/{modelId}
+criteria
+object
+{ gender, ethnicity, age, bodyType, pose, background, expression }
+naturalLanguageInput
+string
+Texte libre saisi par l&apos;utilisateur
+generatedPrompt
+string
+Prompt final généré par GPT-4o
+mannequinImageUrl
+string
+URL du mannequin généré par GPT-Image-1
+resultUrls
+string[]
+URLs des 4 à 8 visuels finaux Fashn.ai
+selectedResultUrl
+string | null
+Visuel choisi par l&apos;utilisateur
+status
+enum
+&apos;pending&apos; | &apos;generating&apos; | &apos;completed&apos; | &apos;failed&apos;
+creditsUsed
+number
+Nombre de crédits consommés
+isPublic
+boolean
+Publié en galerie publique
+createdAt
+timestamp
+Date de la génération
+Collection : models (mannequins réels)
+Champ
+Type
+Description
+userId
+string
+Compte Firebase du mannequin
+name
+string
+Nom réel (confidentiel)
+stageName
+string
+Nom public affiché sur la plateforme
+portfolioUrls
+string[]
+Photos du portfolio
+measurements
+object
+{ height, bust, waist, hips }
+attributes
+object
+{ gender, ethnicity, hairColor, eyeColor }
+royaltyPercentage
+number
+Pourcentage de royalties négocié
+status
+enum
+&apos;pending&apos; | &apos;active&apos; | &apos;suspended&apos;
+isCelebrity
+boolean
+Statut célébrité (badge Premium)
+totalEarnings
+number
+Gains totaux versés
+totalUsages
+number
+Nombre total d&apos;utilisations du profil
+approvedAt
+timestamp | null
+Date de validation par l&apos;admin
+3.3 Index Firestore composites
+Collection
+Champs indexés
+Usage
+generations
+(userId, createdAt DESC)
+Historique utilisateur
+generations
+(projectId, createdAt DESC)
+Générations d&apos;un projet
+gallery
+(featured DESC, createdAt DESC)
+Galerie vedette
+gallery
+(likes DESC, createdAt DESC)
+Tri par popularité
+royalties
+(modelId, status, createdAt DESC)
+Suivi royalties mannequin
+notifications
+(userId, isRead, createdAt DESC)
+Notifications non lues
+models
+(status, isCelebrity DESC)
+Liste mannequins actifs
+3.4 Règles de sécurité Firebase (Firestore)
+Les règles de sécurité suivantes définissent les accès autorisés :
+users : lecture et écriture autorisées uniquement sur son propre document (request.auth.uid == userId)
+generations : lecture et écriture autorisées uniquement sur ses propres générations
+gallery : lecture publique, écriture authentifiée uniquement sur son propre document
+models : lecture publique, création via formulaire candidature, modification admin uniquement
+subscriptions / transactions : lecture par le propriétaire uniquement
+royalties : lecture par l&apos;admin et le mannequin concerné uniquement
+Toutes les collections admin : role == &apos;admin&apos; obligatoire
+3.5 Firebase Storage — Structure des dossiers
+Chemin
+Contenu
+Accès
+garments/{userId}/{generationId}
+Photos des vêtements uploadés
+Auth — propre userId
+mannequins/{generationId}
+Mannequins générés par GPT-Image-1
+Auth — propre userId
+results/{generationId}/{index}
+Visuels finaux Fashn.ai
+Auth — propre userId
+models/portfolio/{modelId}
+Photos portfolio mannequins réels
+Lecture publique
+brands/logos/{userId}
+Logos des marques
+Lecture publique
+4. Description des Pages et Composants
+Pages Publiques
+Landing Page (/)
+Page d&apos;accueil immersive, vitrine principale de TheFlashMode.
+HeroSection : animation avant/après avec slider de démonstration
+HowItWorks : 3 étapes illustrées (Upload → Critères → Téléchargement)
+PricingPreview : résumé condensé des 4 plans
+ModelCarousel : carousel horizontal des mannequins partenaires
+Testimonials : citations de marques utilisatrices
+Footer : liens légaux, réseaux sociaux, newsletter opt-in
+Galerie Publique (/galerie)
+Showcase des meilleures créations de la communauté.
+MasonryGrid : grille en brique responsive des visuels
+GalleryCard : aperçu d&apos;un visuel avec marque, likes, tags
+FilterBar : filtres catégorie vêtement, type mannequin, popularité
+LikeButton : interaction sans connexion requise
+Page Tarifs (/tarifs)
+Présentation détaillée des plans d&apos;abonnement.
+PricingTable : tableau comparatif des 4 plans
+BillingToggle : switch mensuel/annuel avec économie affichée
+FAQ : questions fréquentes sur les crédits et abonnements
+Page Mannequins (/mannequins)
+Catalogue des mannequins partenaires disponibles.
+ModelGrid : grille des profils avec filtres physiques
+ModelCard : fiche aperçu (photo, nom scène, ethnie, statut)
+CTA Candidature : bannière d&apos;appel à rejoindre la plateforme
+Profil Mannequin Public (/mannequins/:id)
+Page dédiée à un mannequin partenaire.
+ModelHero : photo principale + stats d&apos;utilisation
+PortfolioGrid : galerie des photos du mannequin
+AttributesBadges : caractéristiques physiques visuelles
+UseModelButton : CTA redirigeant vers la génération
+Pages d&apos;Authentification
+Inscription (/inscription)
+Création de compte avec choix du type de profil.
+AuthForm : formulaire email/mot de passe
+SocialLogin : bouton Google OAuth
+AccountTypeSelector : choix Marque / Mannequin / Particulier
+Connexion (/connexion)
+Authentification des utilisateurs existants.
+AuthForm : email/password
+SocialLogin : Google OAuth
+ForgotPassword : lien réinitialisation
+Onboarding (/onboarding)
+Parcours guidé post-inscription en 3 étapes.
+OnboardingStep 1 : informations de marque (nom, logo, secteur)
+OnboardingStep 2 : création du premier projet
+TutorialSlide : 3 slides d&apos;explication rapide de l&apos;interface
+ProgressBar : avancement du parcours onboarding
+Espace Utilisateur (connecté)
+Dashboard (/dashboard)
+Vue d&apos;ensemble personnalisée de l&apos;activité de l&apos;utilisateur.
+CreditWidget : crédits restants avec barre de progression
+ProjectsList : 3 derniers projets actifs
+RecentGenerations : 6 derniers visuels générés
+XPProgressBar : niveau de gamification avec prochain badge
+QuickActions : boutons Nouvelle génération / Nouveau projet
+Nouvelle Génération (/generer)
+Tunnel de création en 3 étapes séquentielles.
+GarmentUploader : zone drag &amp; drop avec preview et validation
+ModelSelector : onglets IA / Vrai mannequin
+CriteriaForm : sélecteurs visuels (pictos cliquables) pour chaque critère
+NaturalLanguageInput : champ texte libre avec suggestions GPT
+GenerationSummary : récapitulatif avant lancement
+CreditCost : coût en crédits affiché dynamiquement
+Résultats (/generer/:id/resultats)
+Affichage et sélection des visuels générés.
+ResultsGrid : grille des 4 à 8 variantes avec sélection
+ImageEditor : outil de retouche légère (luminosité, recadrage, fond)
+RegenerateOptions : relancer tout ou cibler (visage / fond / pose)
+ExportPanel : choix format/résolution + téléchargement
+PublishToGallery : checkbox opt-in publication galerie
+Mes Projets (/projets)
+Gestion de l&apos;ensemble des projets/campagnes.
+ProjectCard : vignette projet avec stats (nb générations, date)
+ProjectFilters : tri par statut, date, nom
+CreateProjectModal : modale de création rapide
+Détail Projet (/projets/:id)
+Vue complète d&apos;un projet avec toutes ses générations.
+ProjectHeader : nom, description, statistiques du projet
+GenerationsGrid : toutes les images du projet
+GenerationCard : miniature cliquable avec date et statut
+Historique (/historique)
+Timeline complète de toutes les générations.
+GenerationTimeline : vue chronologique avec groupement par date
+FilterPanel : filtres avancés (projet, mannequin, statut)
+Paramètres (/parametres)
+Gestion du compte et des préférences.
+Onglet Profil : nom, email, avatar
+Onglet Marque : logo, couleurs, description
+Onglet Sécurité : changement mot de passe, sessions actives
+Onglet Notifications : préférences email et in-app
+Abonnement (/abonnement)
+Gestion complète du plan et des crédits.
+CurrentPlan : plan actuel, crédits restants, date renouvellement
+PlanUpgrade : comparatif et bouton upgrade
+CreditsPurchase : packs à la carte
+InvoiceList : historique des factures avec lien PDF (Stripe)
+Notifications (/notifications)
+Centre de notifications in-app.
+NotificationList : liste chronologique avec icônes par type
+NotificationItem : élément cliquable redirigeant vers l&apos;action
+Espace Mannequin
+Dashboard Mannequin (/mannequin/dashboard)
+Vue d&apos;ensemble des revenus et de l&apos;activité.
+EarningsWidget : gains totaux et du mois en cours
+UsageChart : graphique d&apos;utilisation mensuelle
+ProfileStatus : état du profil (en attente / actif / suspendu)
+Profil Mannequin (/mannequin/profil)
+Gestion du profil public du mannequin.
+PortfolioManager : ajout/suppression de photos
+MeasurementsForm : mise à jour des mensurations
+ContractStatus : état du contrat droits à l&apos;image
+Candidature (/mannequin/candidature)
+Formulaire d&apos;inscription au programme mannequin.
+ApplicationForm : formulaire multi-étapes (infos perso, physique, expérience)
+PhotoUploader : minimum 5 photos dans des angles variés
+ContractSigner : signature électronique du contrat droits image
+RoyaltyInfo : explication du système de pourcentage
+Administration (/admin/*)
+Dashboard Admin (/admin)
+Vue globale des KPIs de la plateforme.
+AdminKPIs : utilisateurs actifs, revenus J/M/A, générations du jour
+RevenueChart : courbe des revenus sur 12 mois
+UsageChart : générations par jour, crédits consommés
+Gestion Utilisateurs (/admin/utilisateurs)
+Supervision et modération des comptes.
+UsersTable : tableau recherchable avec filtres
+UserActions : voir détail, suspendre, modifier plan
+Gestion Mannequins (/admin/mannequins)
+Validation des candidatures et gestion des royalties.
+PendingApplications : liste des candidatures à traiter
+ModelApproval : modale validation/refus avec message personnalisé
+RoyaltiesPanel : royalties dues et bouton de paiement
+Modération Galerie (/admin/galerie)
+File de modération des visuels publiés.
+ModerationQueue : visuels en attente de validation
+ContentCard : aperçu avec boutons Approuver / Rejeter / Mettre en avant
+Finances (/admin/finances)
+Suivi financier global de la plateforme.
+FinancialSummary : revenus par plan, MRR, ARR
+RoyaltiesTracker : mannequins et montants dus
+ExportButton : export CSV comptable
+5. Configuration des Routes (app.tsx)
+5.1 Tableau des routes
+Route
+Page
+Layout
+Protection
+/ (Public)
+LandingPage
+PublicLayout
+Accès libre
+/galerie
+GalleriePage
+PublicLayout
+Accès libre
+/tarifs
+TarifsPage
+PublicLayout
+Accès libre
+/mannequins
+MannequisPage
+PublicLayout
+Accès libre
+/mannequins/:id
+MannequisProfilePage
+PublicLayout
+Accès libre
+/connexion
+ConnexionPage
+AuthLayout
+Non-authentifié uniquement
+/inscription
+InscriptionPage
+AuthLayout
+Non-authentifié uniquement
+/onboarding
+OnboardingPage
+AuthLayout
+PrivateRoute requis
+/dashboard
+DashboardPage
+DashboardLayout
+PrivateRoute requis
+/generer
+GenererPage
+DashboardLayout
+PrivateRoute requis
+/generer/:id/resultats
+ResultatsPage
+DashboardLayout
+PrivateRoute requis
+/projets
+ProjetsPage
+DashboardLayout
+PrivateRoute requis
+/projets/:id
+ProjetDetailPage
+DashboardLayout
+PrivateRoute requis
+/historique
+HistoriquePage
+DashboardLayout
+PrivateRoute requis
+/parametres
+ParametresPage
+DashboardLayout
+PrivateRoute requis
+/abonnement
+AbonnementPage
+DashboardLayout
+PrivateRoute requis
+/notifications
+NotificationsPage
+DashboardLayout
+PrivateRoute requis
+/mannequin/dashboard
+MannequisDashboardPage
+ModelLayout
+ModelRoute requis
+/mannequin/profil
+MannequisProfilPage
+ModelLayout
+ModelRoute requis
+/mannequin/candidature
+MannequisCandidaturePage
+ModelLayout
+ModelRoute requis
+/admin
+AdminDashboardPage
+AdminLayout
+AdminRoute requis
+/admin/utilisateurs
+AdminUtilisateursPage
+AdminLayout
+AdminRoute requis
+/admin/mannequins
+AdminMannequisPage
+AdminLayout
+AdminRoute requis
+/admin/galerie
+AdminGaleriePage
+AdminLayout
+AdminRoute requis
+/admin/finances
+AdminFinancesPage
+AdminLayout
+AdminRoute requis
+5.2 Guards de navigation
+Guard
+Condition
+Redirection si échec
+PrivateRoute
+user !== null (Firebase Auth)
+Vers /connexion avec redirect param
+ModelRoute
+user.role === &apos;model&apos; OR &apos;admin&apos;
+Vers /dashboard
+AdminRoute
+user.role === &apos;admin&apos;
+Vers /dashboard
+5.3 Code source app.tsx
+Le code de configuration des routes React Router v6 est présenté ci-dessous :
+// app.tsx — TheFlashMode
+import { BrowserRouter, Routes, Route, Navigate } from &apos;react-router-dom&apos;
+import { useAuth } from &apos;./hooks/useAuth&apos;
+// Layouts
+import PublicLayout      from &apos;./layouts/PublicLayout&apos;
+import AuthLayout        from &apos;./layouts/AuthLayout&apos;
+import DashboardLayout   from &apos;./layouts/DashboardLayout&apos;
+import ModelLayout       from &apos;./layouts/ModelLayout&apos;
+import AdminLayout       from &apos;./layouts/AdminLayout&apos;
+// Guards
+import PrivateRoute  from &apos;./components/guards/PrivateRoute&apos;
+import AdminRoute    from &apos;./components/guards/AdminRoute&apos;
+import ModelRoute    from &apos;./components/guards/ModelRoute&apos;
+// Pages Publiques
+import LandingPage           from &apos;./pages/public/LandingPage&apos;
+import GalleriePage          from &apos;./pages/public/GalleriePage&apos;
+import TarifsPage            from &apos;./pages/public/TarifsPage&apos;
+import MannequisPage         from &apos;./pages/public/MannequisPage&apos;
+import MannequisProfilePage  from &apos;./pages/public/MannequisProfilePage&apos;
+// Auth
+import ConnexionPage   from &apos;./pages/auth/ConnexionPage&apos;
+import InscriptionPage from &apos;./pages/auth/InscriptionPage&apos;
+import OnboardingPage  from &apos;./pages/auth/OnboardingPage&apos;
+// Dashboard Utilisateur
+import DashboardPage     from &apos;./pages/dashboard/DashboardPage&apos;
+import GenererPage       from &apos;./pages/dashboard/GenererPage&apos;
+import ResultatsPage     from &apos;./pages/dashboard/ResultatsPage&apos;
+import ProjetsPage       from &apos;./pages/dashboard/ProjetsPage&apos;
+import ProjetDetailPage  from &apos;./pages/dashboard/ProjetDetailPage&apos;
+import HistoriquePage    from &apos;./pages/dashboard/HistoriquePage&apos;
+import ParametresPage    from &apos;./pages/dashboard/ParametresPage&apos;
+import AbonnementPage    from &apos;./pages/dashboard/AbonnementPage&apos;
+import NotificationsPage from &apos;./pages/dashboard/NotificationsPage&apos;
+// Espace Mannequin
+import MannequisDashboardPage  from &apos;./pages/model/MannequisDashboardPage&apos;
+import MannequisProfilPage     from &apos;./pages/model/MannequisProfilPage&apos;
+import MannequisCandidaturePage from &apos;./pages/model/MannequisCandidaturePage&apos;
+// Administration
+import AdminDashboardPage    from &apos;./pages/admin/AdminDashboardPage&apos;
+import AdminUtilisateursPage from &apos;./pages/admin/AdminUtilisateursPage&apos;
+import AdminMannequisPage    from &apos;./pages/admin/AdminMannequisPage&apos;
+import AdminGaleriePage      from &apos;./pages/admin/AdminGaleriePage&apos;
+import AdminFinancesPage     from &apos;./pages/admin/AdminFinancesPage&apos;
+export default function App() {
+  const { user, loading } = useAuth()
+  if (loading) return &lt;SplashScreen /&gt;
+  return (
+    &lt;BrowserRouter&gt;
+      &lt;Routes&gt;
+        {/* ── PUBLIC ─────────────────────────────────── */}
+        &lt;Route element={&lt;PublicLayout /&gt;}&gt;
+          &lt;Route path=&quot;/&quot;                element={&lt;LandingPage /&gt;} /&gt;
+          &lt;Route path=&quot;/galerie&quot;         element={&lt;GalleriePage /&gt;} /&gt;
+          &lt;Route path=&quot;/tarifs&quot;          element={&lt;TarifsPage /&gt;} /&gt;
+          &lt;Route path=&quot;/mannequins&quot;      element={&lt;MannequisPage /&gt;} /&gt;
+          &lt;Route path=&quot;/mannequins/:id&quot;  element={&lt;MannequisProfilePage /&gt;} /&gt;
+        &lt;/Route&gt;
+        {/* ── AUTH ───────────────────────────────────── */}
+        &lt;Route element={&lt;AuthLayout /&gt;}&gt;
+          &lt;Route path=&quot;/connexion&quot;   element={&lt;ConnexionPage /&gt;} /&gt;
+          &lt;Route path=&quot;/inscription&quot; element={&lt;InscriptionPage /&gt;} /&gt;
+          &lt;Route path=&quot;/onboarding&quot;  element={
+            &lt;PrivateRoute&gt;&lt;OnboardingPage /&gt;&lt;/PrivateRoute&gt;
+          } /&gt;
+        &lt;/Route&gt;
+        {/* ── DASHBOARD UTILISATEUR ──────────────────── */}
+        &lt;Route element={&lt;PrivateRoute&gt;&lt;DashboardLayout /&gt;&lt;/PrivateRoute&gt;}&gt;
+          &lt;Route path=&quot;/dashboard&quot;                         element={&lt;DashboardPage /&gt;} /&gt;
+          &lt;Route path=&quot;/generer&quot;                           element={&lt;GenererPage /&gt;} /&gt;
+          &lt;Route path=&quot;/generer/:generationId/resultats&quot;   element={&lt;ResultatsPage /&gt;} /&gt;
+          &lt;Route path=&quot;/projets&quot;                           element={&lt;ProjetsPage /&gt;} /&gt;
+          &lt;Route path=&quot;/projets/:projectId&quot;                element={&lt;ProjetDetailPage /&gt;} /&gt;
+          &lt;Route path=&quot;/historique&quot;                        element={&lt;HistoriquePage /&gt;} /&gt;
+          &lt;Route path=&quot;/parametres&quot;                        element={&lt;ParametresPage /&gt;} /&gt;
+          &lt;Route path=&quot;/abonnement&quot;                        element={&lt;AbonnementPage /&gt;} /&gt;
+          &lt;Route path=&quot;/notifications&quot;                     element={&lt;NotificationsPage /&gt;} /&gt;
+        &lt;/Route&gt;
+        {/* ── ESPACE MANNEQUIN ───────────────────────── */}
+        &lt;Route element={&lt;ModelRoute&gt;&lt;ModelLayout /&gt;&lt;/ModelRoute&gt;}&gt;
+          &lt;Route path=&quot;/mannequin/dashboard&quot;    element={&lt;MannequisDashboardPage /&gt;} /&gt;
+          &lt;Route path=&quot;/mannequin/profil&quot;       element={&lt;MannequisProfilPage /&gt;} /&gt;
+          &lt;Route path=&quot;/mannequin/candidature&quot;  element={&lt;MannequisCandidaturePage /&gt;} /&gt;
+        &lt;/Route&gt;
+        {/* ── ADMINISTRATION ─────────────────────────── */}
+        &lt;Route element={&lt;AdminRoute&gt;&lt;AdminLayout /&gt;&lt;/AdminRoute&gt;}&gt;
+          &lt;Route path=&quot;/admin&quot;                element={&lt;AdminDashboardPage /&gt;} /&gt;
+          &lt;Route path=&quot;/admin/utilisateurs&quot;   element={&lt;AdminUtilisateursPage /&gt;} /&gt;
+          &lt;Route path=&quot;/admin/mannequins&quot;     element={&lt;AdminMannequisPage /&gt;} /&gt;
+          &lt;Route path=&quot;/admin/galerie&quot;        element={&lt;AdminGaleriePage /&gt;} /&gt;
+          &lt;Route path=&quot;/admin/finances&quot;       element={&lt;AdminFinancesPage /&gt;} /&gt;
+        &lt;/Route&gt;
+        {/* ── FALLBACK ───────────────────────────────── */}
+        &lt;Route path=&quot;*&quot; element={&lt;Navigate to=&quot;/&quot; replace /&gt;} /&gt;
+      &lt;/Routes&gt;
+    &lt;/BrowserRouter&gt;
+  )
+}
+6. Plans Tarifaires
+Fonctionnalité
+Free
+Starter — 29€/mois
+Pro — 79€/mois
+Entreprise — 199€/mois
+Crédits / mois
+5
+50
+200
+Illimités
+Variantes par session
+4
+4 à 8
+4 à 8
+4 à 8
+Export HD
+Non (watermark)
+Oui
+Oui
+Oui
+Mannequins IA
+Oui
+Oui
+Oui
+Oui
+Vrais mannequins
+Non
+Oui
+Oui
+Oui
+Projets
+1
+10
+Illimités
+Illimités
+Workspace équipe
+Non
+Non
+3 membres
+Illimités
+Analytics avancés
+Non
+Non
+Oui
+Oui
+Rapports export
+Non
+Non
+Oui
+Oui
+Accès API
+Non
+Non
+Non
+Oui
+Account Manager
+Non
+Non
+Non
+Oui
+Support
+Email
+Email
+Prioritaire
+Dédié
